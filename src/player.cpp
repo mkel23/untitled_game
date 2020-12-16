@@ -1,7 +1,7 @@
 #include "constants.h"
 #include "player.h"
 
-Player::Player(LTexture* playerTexture, SDL_Rect* playerClips) {
+Player::Player(Texture* playerTexture, SDL_Rect* playerClips) {
   mPlayerTexture = playerTexture;
   mPlayerClips = playerClips;
 

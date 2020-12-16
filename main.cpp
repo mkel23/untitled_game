@@ -3,22 +3,22 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
-#include "constants.h"
-#include "globals.h"
-#include "ltexture.h"
-#include "player.h"
+#include "src/constants.h"
+#include "src/globals.h"
+#include "src/texture.h"
+#include "src/player.h"
 
 using namespace std;
 
 SDL_Renderer* gRenderer = NULL;
 
-LTexture gTextTexture;
+Texture gTextTexture;
 SDL_Window* gWindow = NULL;
 
 SDL_Rect gTileClips[4];
-LTexture gTileSheetTexture;
+Texture gTileSheetTexture;
 SDL_Rect gPlayerClips[1];
-LTexture gPlayerTexture;
+Texture gPlayerTexture;
 
 bool init();
 bool loadMedia();
@@ -69,7 +69,7 @@ SDL_Texture* loadTexture(std::string path) {
 bool loadMedia() {
   bool success = true;
 
-  if (!gTileSheetTexture.loadFromFile("res/tile.png")) {
+  if (!gTileSheetTexture.loadFromFile("res/img/tile.png")) {
     success = false;
   } else {
     gTileClips[0].x = 0;
@@ -93,7 +93,7 @@ bool loadMedia() {
     gTileClips[3].h = 32;
   }
 
-  if (!gPlayerTexture.loadFromFile("res/player.png")) {
+  if (!gPlayerTexture.loadFromFile("res/img/player.png")) {
     success = false;
   } else {
     gPlayerClips[0].x = 0;

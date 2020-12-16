@@ -1,16 +1,16 @@
-#ifndef LTEXTURE_H
-#define LTEXTURE_H
+#ifndef TEXTURE_H
+#define TEXTURE_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
 #include "globals.h"
 
-class LTexture {
+class Texture {
   public:
-    LTexture();
+    Texture();
 
-    ~LTexture();
+    ~Texture();
 
     bool loadFromFile(std::string path);
 

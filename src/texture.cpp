@@ -1,16 +1,16 @@
-#include "ltexture.h"
+#include "texture.h"
 
-LTexture::LTexture() {
+Texture::Texture() {
   mTexture = NULL;
   mWidth = 0;
   mHeight = 0;
 }
 
-LTexture::~LTexture() {
+Texture::~Texture() {
   free();
 }
 
-bool LTexture::loadFromFile(std::string path) {
+bool Texture::loadFromFile(std::string path) {
   free();
 
   SDL_Texture* newTexture = NULL;
@@ -29,7 +29,7 @@ bool LTexture::loadFromFile(std::string path) {
   return mTexture != NULL;
 }
 
-void LTexture::free() {
+void Texture::free() {
   if (mTexture != NULL) {
     mTexture = NULL;
     mWidth = 0;
@@ -37,19 +37,19 @@ void LTexture::free() {
   }
 }
 
-void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
+void Texture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
   SDL_SetTextureColorMod(mTexture, red, green, blue);
 }
 
-void LTexture::setBlendMode(SDL_BlendMode blending) {
+void Texture::setBlendMode(SDL_BlendMode blending) {
   SDL_SetTextureBlendMode(mTexture, blending);
 }
 
-void LTexture::setAlpha(Uint8 alpha) {
+void Texture::setAlpha(Uint8 alpha) {
   SDL_SetTextureAlphaMod(mTexture, alpha);
 }
 
-void LTexture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
+void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
   SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
   if (clip != NULL) {
@@ -60,11 +60,11 @@ void LTexture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cen
   SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
-int LTexture::getWidth() {
+int Texture::getWidth() {
   return mWidth;
 }
 
-int LTexture::getHeight() {
+int Texture::getHeight() {
   return mHeight;
 }
 

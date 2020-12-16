@@ -34,10 +34,13 @@ What I've thought of so far, obviously going to change FREQUENTLY:
 
 - [X] Get a background and character movement
 - [X] Clean up Makefile
+  - [ ] Look into CMake/SCons
+  - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
 - [ ] Undecided Game Engine Parts
-  - [ ] Extract classes out to their own files
+  - [X] Extract classes out to their own files
+  - [ ] Game State
   - [ ] Sound
-  - [ ] Texture Loading/Rendering
+  - [X] Texture Loading/Rendering (checking this one off for now since I have a way to load pngs and display clipped sprites)
   - [ ] Input/Controls
   - [ ] Menu System
   - [ ] Saving/Loading

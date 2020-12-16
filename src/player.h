@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <SDL2/SDL.h>
-#include "ltexture.h"
+#include "texture.h"
 
 class Player {
   public:
@@ -11,7 +11,7 @@ class Player {
 
     static const int PLAYER_VEL = 10;
 
-    Player(LTexture* playerTexture, SDL_Rect* playerClips);
+    Player(Texture* playerTexture, SDL_Rect* playerClips);
 
     void handleEvent(SDL_Event& e);
 
@@ -24,7 +24,7 @@ class Player {
 
     int mVelX, mVelY;
 
-    LTexture* mPlayerTexture;
+    Texture* mPlayerTexture;
     SDL_Rect* mPlayerClips;
 };
 
