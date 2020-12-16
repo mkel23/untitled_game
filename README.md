@@ -27,11 +27,13 @@ Yeah...I know. It's not the greatest right now, but will update to (hopefully) b
 * I'm using [Lazy Foo' Productions Beginning Game Programming v2.0](https://lazyfoo.net/tutorials/SDL/index.php) to get started, given the above.
 * This is a hobby project, but I'm open to learning, so call me out on my bullshit.
 
+* Current assets found here (this will most likely change, just wanted to get something going for once): [https://opengameart.org/content/16xx16-tileset-pokemonzelda-styled](https://opengameart.org/content/16xx16-tileset-pokemonzelda-styled)
+
 ## TODO
 What I've thought of so far, obviously going to change FREQUENTLY:
 
-- [ ] Get a background and character movement
-- [ ] Clean up Makefile
+- [X] Get a background and character movement
+- [X] Clean up Makefile
 - [ ] Undecided Game Engine Parts
   - [ ] Extract classes out to their own files
   - [ ] Sound

@@ -3,120 +3,27 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
+#include "constants.h"
+#include "globals.h"
+#include "ltexture.h"
+#include "player.h"
 
 using namespace std;
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
-
-class LTexture {
-  public:
-    LTexture();
-
-    ~LTexture();
-
-    bool loadFromFile(std::string path);
-
-    bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
-
-    void free();
-
-    void setColor(Uint8 red, Uint8 green, Uint8 blue);
-
-    void setBlendMode(SDL_BlendMode blending);
-
-    void setAlpha(Uint8 alpha);
-
-    void render(int x, int y, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
-
-    int getWidth();
-
-    int getHeight();
-
-  private:
-    SDL_Texture* mTexture;
-
-    int mWidth;
-    int mHeight;
-};
-
 SDL_Renderer* gRenderer = NULL;
+
 LTexture gTextTexture;
 SDL_Window* gWindow = NULL;
 
-LTexture::LTexture() {
-  mTexture = NULL;
-  mWidth = 0;
-  mHeight = 0;
-}
-
-LTexture::~LTexture() {
-  free();
-}
-
-bool LTexture::loadFromFile(std::string path) {
-  free();
-
-  SDL_Texture* newTexture = NULL;
-
-  SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-
-  SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-  newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-
-  mWidth = loadedSurface->w;
-  mHeight = loadedSurface->h;
-
-  SDL_FreeSurface(loadedSurface);
-
-  mTexture = newTexture;
-  return mTexture != NULL;
-}
-
-void LTexture::free() {
-  if (mTexture != NULL) {
-    mTexture = NULL;
-    mWidth = 0;
-    mHeight = 0;
-  }
-}
-
-void LTexture::setColor(Uint8 red, Uint8 green, Uint8 blue) {
-  SDL_SetTextureColorMod(mTexture, red, green, blue);
-}
-
-void LTexture::setBlendMode(SDL_BlendMode blending) {
-  SDL_SetTextureBlendMode(mTexture, blending);
-}
-
-void LTexture::setAlpha(Uint8 alpha) {
-  SDL_SetTextureAlphaMod(mTexture, alpha);
-}
-
-void LTexture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
-  SDL_Rect renderQuad = { x, y, mWidth, mHeight };
-
-  if (clip != NULL) {
-    renderQuad.w = clip->w;
-    renderQuad.h = clip->h;
-  }
-
-  SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
-}
-
-int LTexture::getWidth() {
-  return mWidth;
-}
-
-int LTexture::getHeight() {
-  return mHeight;
-}
+SDL_Rect gTileClips[4];
+LTexture gTileSheetTexture;
+SDL_Rect gPlayerClips[1];
+LTexture gPlayerTexture;
 
 bool init();
 bool loadMedia();
 void close();
 void loop();
-
 
 bool init() {
   bool success = true;
@@ -162,11 +69,46 @@ SDL_Texture* loadTexture(std::string path) {
 bool loadMedia() {
   bool success = true;
 
+  if (!gTileSheetTexture.loadFromFile("res/tile.png")) {
+    success = false;
+  } else {
+    gTileClips[0].x = 0;
+    gTileClips[0].y = 0;
+    gTileClips[0].w = 32;
+    gTileClips[0].h = 32;
+
+    gTileClips[1].x = 32;
+    gTileClips[1].y = 0;
+    gTileClips[1].w = 32;
+    gTileClips[1].h = 32;
+
+    gTileClips[2].x = 64;
+    gTileClips[2].y = 0;
+    gTileClips[2].w = 32;
+    gTileClips[2].h = 32;
+
+    gTileClips[3].x = 0;
+    gTileClips[3].y = 32;
+    gTileClips[3].w = 32;
+    gTileClips[3].h = 32;
+  }
+
+  if (!gPlayerTexture.loadFromFile("res/player.png")) {
+    success = false;
+  } else {
+    gPlayerClips[0].x = 0;
+    gPlayerClips[0].y = 0;
+    gPlayerClips[0].w = 32;
+    gPlayerClips[0].h = 32;
+  }
+
   return success;
 }
 
 void close() {
   gTextTexture.free();
+  gTileSheetTexture.free();
+  gPlayerTexture.free();
 
   SDL_DestroyRenderer(gRenderer);
   gRenderer = NULL;
@@ -182,16 +124,33 @@ void close() {
 void loop() {
   SDL_Event e;
   bool quit = false;
+  Player player(&gPlayerTexture, gPlayerClips);
 
   while (!quit) {
     while (SDL_PollEvent(&e)) {
       if (e.type == SDL_QUIT) {
         quit = true;
       }
+
+      player.handleEvent(e);
     }
+
+    player.move();
 
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(gRenderer);
+
+    for (int i = 0; i < 15; i++) {
+      for (int j = 0; j < 20; j++) {
+        if (i % 2 == 0) {
+          gTileSheetTexture.render(j*32, i*32, &gTileClips[0]);
+        } else {
+          gTileSheetTexture.render(j*32, i*32, &gTileClips[3]);
+        }
+      }
+    }
+
+    player.render();
 
     SDL_RenderPresent(gRenderer);
   }
