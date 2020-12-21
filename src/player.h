@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include "texture.h"
+#include "tile.h"
 
 class Player {
   public:
@@ -15,14 +16,16 @@ class Player {
 
     void handleEvent(SDL_Event& e);
 
-    void move();
+    void move(Tile* tiles[]);
 
-    void render();
+    void setCamera(SDL_Rect& camera);
+
+    void render(SDL_Rect& camera);
 
   private:
-    int mPosX, mPosY;
-
     int mVelX, mVelY;
+
+    SDL_Rect mBox;
 
     Texture* mPlayerTexture;
     SDL_Rect* mPlayerClips;

@@ -1,15 +1,19 @@
 #include "constants.h"
+#include "collision_manager.h"
 #include "player.h"
 
 Player::Player(Texture* playerTexture, SDL_Rect* playerClips) {
   mPlayerTexture = playerTexture;
   mPlayerClips = playerClips;
 
-  mPosX = 0;
-  mPosY = 0;
-
   mVelX = 0;
   mVelY = 0;
+
+  mBox.x = 0;
+  mBox.y = 0;
+
+  mBox.w = PLAYER_WIDTH;
+  mBox.h = PLAYER_HEIGHT;
 }
 
 void Player::handleEvent(SDL_Event& e) {
@@ -30,20 +34,41 @@ void Player::handleEvent(SDL_Event& e) {
   }
 }
 
-void Player::move() {
-  mPosX += mVelX;
+void Player::move(Tile* tiles[]) {
+  mBox.x += mVelX;
 
-  if ((mPosX < 0) || (mPosX + PLAYER_WIDTH > SCREEN_WIDTH)) {
-    mPosX -= mVelX;
+  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
+    mBox.x -= mVelX;
   }
 
-  mPosY += mVelY;
+  mBox.y += mVelY;
 
-  if ((mPosY < 0) || (mPosY + PLAYER_HEIGHT > SCREEN_HEIGHT)) {
-    mPosY -= mVelY;
+  if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, tiles)) {
+    mBox.y -= mVelY;
   }
 }
 
-void Player::render() {
-  mPlayerTexture->render(mPosX, mPosY, &mPlayerClips[0]);
+void Player::setCamera(SDL_Rect& camera) {
+  camera.x = (mBox.x + PLAYER_WIDTH / 2) - SCREEN_WIDTH / 2;
+  camera.y = (mBox.y + PLAYER_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+
+  if (camera.x < 0) {
+    camera.x = 0;
+  }
+
+  if (camera.x > LEVEL_WIDTH - camera.w) {
+    camera.x = LEVEL_WIDTH - camera.w;
+  }
+
+  if (camera.y < 0) {
+    camera.y = 0;
+  }
+
+  if (camera.y > LEVEL_HEIGHT - camera.h) {
+    camera.y = LEVEL_HEIGHT - camera.h;
+  }
+}
+
+void Player::render(SDL_Rect& camera) {
+  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, &mPlayerClips[0]);
 }

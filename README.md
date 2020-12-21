@@ -36,6 +36,8 @@ What I've thought of so far, obviously going to change FREQUENTLY:
 - [X] Clean up Makefile
   - [ ] Look into CMake/SCons
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
+- [ ] Separate globals/functions in `main.cpp` to Game class
+- [ ] Grid Based Movement (a la Pokemon)
 - [ ] Undecided Game Engine Parts
   - [X] Extract classes out to their own files
   - [ ] Game State
