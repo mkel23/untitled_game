@@ -8,4 +8,6 @@ const int SCREEN_HEIGHT = 480;
 const int LEVEL_WIDTH = 1280;
 const int LEVEL_HEIGHT = 960;
 
+const int PLAYER_SPRITE_FRAMES = 4;
+
 #endif

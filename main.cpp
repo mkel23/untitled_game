@@ -19,7 +19,7 @@ SDL_Window* gWindow = NULL;
 
 SDL_Rect gTileClips[4];
 Texture gTileSheetTexture;
-SDL_Rect gPlayerClips[1];
+SDL_Rect gPlayerClips[5][4];
 Texture gPlayerTexture;
 
 bool init();
@@ -91,10 +91,110 @@ bool loadMedia(Tile* tiles[]) {
   if (!gPlayerTexture.loadFromFile("res/img/player.png")) {
     success = false;
   } else {
-    gPlayerClips[0].x = 0;
-    gPlayerClips[0].y = 0;
-    gPlayerClips[0].w = 32;
-    gPlayerClips[0].h = 32;
+    // IDLE
+    gPlayerClips[0][0].x = 0;
+    gPlayerClips[0][0].y = 0;
+    gPlayerClips[0][0].w = 32;
+    gPlayerClips[0][0].h = 32;
+
+    gPlayerClips[0][1].x = 32;
+    gPlayerClips[0][1].y = 0;
+    gPlayerClips[0][1].w = 32;
+    gPlayerClips[0][1].h = 32;
+
+    gPlayerClips[0][2].x = 64;
+    gPlayerClips[0][2].y = 0;
+    gPlayerClips[0][2].w = 32;
+    gPlayerClips[0][2].h = 32;
+
+    gPlayerClips[0][3].x = 96;
+    gPlayerClips[0][3].y = 0;
+    gPlayerClips[0][3].w = 32;
+    gPlayerClips[0][3].h = 32;
+
+    // UP
+    gPlayerClips[1][0].x = 0;
+    gPlayerClips[1][0].y = 32;
+    gPlayerClips[1][0].w = 32;
+    gPlayerClips[1][0].h = 32;
+
+    gPlayerClips[1][1].x = 32;
+    gPlayerClips[1][1].y = 32;
+    gPlayerClips[1][1].w = 32;
+    gPlayerClips[1][1].h = 32;
+
+    gPlayerClips[1][2].x = 64;
+    gPlayerClips[1][2].y = 32;
+    gPlayerClips[1][2].w = 32;
+    gPlayerClips[1][2].h = 32;
+
+    gPlayerClips[1][3].x = 96;
+    gPlayerClips[1][3].y = 32;
+    gPlayerClips[1][3].w = 32;
+    gPlayerClips[1][3].h = 32;
+
+    // DOWN
+    gPlayerClips[2][0].x = 0;
+    gPlayerClips[2][0].y = 64;
+    gPlayerClips[2][0].w = 32;
+    gPlayerClips[2][0].h = 32;
+
+    gPlayerClips[2][1].x = 32;
+    gPlayerClips[2][1].y = 64;
+    gPlayerClips[2][1].w = 32;
+    gPlayerClips[2][1].h = 32;
+
+    gPlayerClips[2][2].x = 64;
+    gPlayerClips[2][2].y = 64;
+    gPlayerClips[2][2].w = 32;
+    gPlayerClips[2][2].h = 32;
+
+    gPlayerClips[2][3].x = 96;
+    gPlayerClips[2][3].y = 64;
+    gPlayerClips[2][3].w = 32;
+    gPlayerClips[2][3].h = 32;
+
+    // LEFT
+    gPlayerClips[3][0].x = 0;
+    gPlayerClips[3][0].y = 96;
+    gPlayerClips[3][0].w = 32;
+    gPlayerClips[3][0].h = 32;
+
+    gPlayerClips[3][1].x = 32;
+    gPlayerClips[3][1].y = 96;
+    gPlayerClips[3][1].w = 32;
+    gPlayerClips[3][1].h = 32;
+
+    gPlayerClips[3][2].x = 64;
+    gPlayerClips[3][2].y = 96;
+    gPlayerClips[3][2].w = 32;
+    gPlayerClips[3][2].h = 32;
+
+    gPlayerClips[3][3].x = 96;
+    gPlayerClips[3][3].y = 96;
+    gPlayerClips[3][3].w = 32;
+    gPlayerClips[3][3].h = 32;
+
+    // RIGHT
+    gPlayerClips[4][0].x = 0;
+    gPlayerClips[4][0].y = 128;
+    gPlayerClips[4][0].w = 32;
+    gPlayerClips[4][0].h = 32;
+
+    gPlayerClips[4][1].x = 32;
+    gPlayerClips[4][1].y = 128;
+    gPlayerClips[4][1].w = 32;
+    gPlayerClips[4][1].h = 32;
+
+    gPlayerClips[4][2].x = 64;
+    gPlayerClips[4][2].y = 128;
+    gPlayerClips[4][2].w = 32;
+    gPlayerClips[4][2].h = 32;
+
+    gPlayerClips[4][3].x = 96;
+    gPlayerClips[4][3].y = 128;
+    gPlayerClips[4][3].w = 32;
+    gPlayerClips[4][3].h = 32;
   }
 
   if (!setTiles(tiles)) {
@@ -171,11 +271,30 @@ void close(Tile* tiles[]) {
   SDL_Quit();
 }
 
+void renderDebugGrid(SDL_Rect& camera) {
+  SDL_SetRenderDrawColor(gRenderer, 0xFF, 0x00, 0x00, 0xFF);
+  for (int i = 0; i < LEVEL_HEIGHT / Tile::TILE_HEIGHT; i++) {
+    SDL_RenderDrawLine(gRenderer, 0 - camera.x, i*32 - camera.y, LEVEL_WIDTH - camera.x, i*32 - camera.y);
+  }
+
+  for (int i = 0; i < LEVEL_WIDTH / Tile::TILE_WIDTH; i++) {
+    SDL_RenderDrawLine(gRenderer, i*32 - camera.x, 0 - camera.y, i*32 - camera.x, LEVEL_HEIGHT - camera.y);
+  }
+}
+
 void loop(Tile* tiles[]) {
   SDL_Event e;
   bool quit = false;
-  Player player(&gPlayerTexture, gPlayerClips);
+
+  SDL_Rect* nestedPlayerClips[5];
+  for (int i = 0; i < 5; ++i) {
+    nestedPlayerClips[i] = gPlayerClips[i];
+  }
+
+  Player player(&gPlayerTexture, nestedPlayerClips);
   SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
+  int frame = 0;
 
   while (!quit) {
     while (SDL_PollEvent(&e)) {
@@ -196,7 +315,14 @@ void loop(Tile* tiles[]) {
       tiles[i]->render(camera);
     }
 
-    player.render(camera);
+    player.render(camera, frame / 8);
+
+    renderDebugGrid(camera);
+
+    ++frame;
+    if (frame / 8 >= PLAYER_SPRITE_FRAMES) {
+      frame = 0;
+    }
 
     SDL_RenderPresent(gRenderer);
   }

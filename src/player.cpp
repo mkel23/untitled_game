@@ -2,7 +2,7 @@
 #include "collision_manager.h"
 #include "player.h"
 
-Player::Player(Texture* playerTexture, SDL_Rect* playerClips) {
+Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
   mPlayerTexture = playerTexture;
   mPlayerClips = playerClips;
 
@@ -14,22 +14,48 @@ Player::Player(Texture* playerTexture, SDL_Rect* playerClips) {
 
   mBox.w = PLAYER_WIDTH;
   mBox.h = PLAYER_HEIGHT;
+
+  mDirection = static_cast<int>(PlayerDirection::IDLE);
 }
 
 void Player::handleEvent(SDL_Event& e) {
   if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
-      case SDLK_w: mVelY -= PLAYER_VEL; break;
-      case SDLK_s: mVelY += PLAYER_VEL; break;
-      case SDLK_a: mVelX -= PLAYER_VEL; break;
-      case SDLK_d: mVelX += PLAYER_VEL; break;
+      case SDLK_w:
+        mVelY -= PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::UP);
+        break;
+      case SDLK_s:
+        mVelY += PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::DOWN);
+        break;
+      case SDLK_a:
+        mVelX -= PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::LEFT);
+        break;
+      case SDLK_d:
+        mVelX += PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::RIGHT);
+        break;
     }
   } else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
     switch (e.key.keysym.sym) {
-      case SDLK_w: mVelY += PLAYER_VEL; break;
-      case SDLK_s: mVelY -= PLAYER_VEL; break;
-      case SDLK_a: mVelX += PLAYER_VEL; break;
-      case SDLK_d: mVelX -= PLAYER_VEL; break;
+      case SDLK_w:
+        mVelY += PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::IDLE);
+        break;
+      case SDLK_s:
+        mVelY -= PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::IDLE);
+        break;
+      case SDLK_a:
+        mVelX += PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::IDLE);
+        break;
+      case SDLK_d:
+        mVelX -= PLAYER_VEL;
+        mDirection = static_cast<int>(PlayerDirection::IDLE);
+        break;
     }
   }
 }
@@ -69,6 +95,6 @@ void Player::setCamera(SDL_Rect& camera) {
   }
 }
 
-void Player::render(SDL_Rect& camera) {
-  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, &mPlayerClips[0]);
+void Player::render(SDL_Rect& camera, int frame) {
+  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, &mPlayerClips[mDirection][frame]);
 }
