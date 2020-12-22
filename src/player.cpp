@@ -6,71 +6,85 @@ Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
   mPlayerTexture = playerTexture;
   mPlayerClips = playerClips;
 
-  mVelX = 0;
-  mVelY = 0;
+  mTargetX = 0;
+  mTargetY = 0;
 
-  mBox.x = 0;
-  mBox.y = 0;
+  mBox.x = mTargetX;
+  mBox.y = mTargetY;
 
   mBox.w = PLAYER_WIDTH;
   mBox.h = PLAYER_HEIGHT;
 
   mDirection = static_cast<int>(PlayerDirection::IDLE);
+
+  mMoving = false;
 }
 
 void Player::handleEvent(SDL_Event& e) {
-  if (e.type == SDL_KEYDOWN && e.key.repeat == 0) {
+  if (e.type == SDL_KEYDOWN && e.key.repeat == 0 && !mMoving) {
     switch (e.key.keysym.sym) {
       case SDLK_w:
-        mVelY -= PLAYER_VEL;
+        mTargetY -= PLAYER_HEIGHT;
         mDirection = static_cast<int>(PlayerDirection::UP);
+        mMoving = true;
         break;
       case SDLK_s:
-        mVelY += PLAYER_VEL;
+        mTargetY += PLAYER_HEIGHT;
         mDirection = static_cast<int>(PlayerDirection::DOWN);
+        mMoving = true;
         break;
       case SDLK_a:
-        mVelX -= PLAYER_VEL;
+        mTargetX -= PLAYER_WIDTH;
         mDirection = static_cast<int>(PlayerDirection::LEFT);
+        mMoving = true;
         break;
       case SDLK_d:
-        mVelX += PLAYER_VEL;
+        mTargetX += PLAYER_WIDTH;
         mDirection = static_cast<int>(PlayerDirection::RIGHT);
-        break;
-    }
-  } else if (e.type == SDL_KEYUP && e.key.repeat == 0) {
-    switch (e.key.keysym.sym) {
-      case SDLK_w:
-        mVelY += PLAYER_VEL;
-        mDirection = static_cast<int>(PlayerDirection::IDLE);
-        break;
-      case SDLK_s:
-        mVelY -= PLAYER_VEL;
-        mDirection = static_cast<int>(PlayerDirection::IDLE);
-        break;
-      case SDLK_a:
-        mVelX += PLAYER_VEL;
-        mDirection = static_cast<int>(PlayerDirection::IDLE);
-        break;
-      case SDLK_d:
-        mVelX -= PLAYER_VEL;
-        mDirection = static_cast<int>(PlayerDirection::IDLE);
+        mMoving = true;
         break;
     }
   }
 }
 
 void Player::move(Tile* tiles[]) {
-  mBox.x += mVelX;
+  int velX, velY;
 
-  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
-    mBox.x -= mVelX;
+  if (mTargetX > mBox.x) {
+    velX = PLAYER_VEL;
   }
 
-  mBox.y += mVelY;
+  if (mTargetX < mBox.x) {
+    velX = -PLAYER_VEL;
+  }
+
+  mBox.x += velX;
+
+  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
+    mBox.x -= velX;
+    mMoving = false;
+    mDirection = static_cast<int>(PlayerDirection::IDLE);
+  }
+
+  if (mTargetY > mBox.y) {
+    velY = PLAYER_VEL;
+  }
+
+  if (mTargetY < mBox.y) {
+    velY = -PLAYER_VEL;
+  }
+
+  mBox.y += velY;
 
   if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, tiles)) {
-    mBox.y -= mVelY;
+    mBox.y -= velY;
+    mMoving = false;
+    mDirection = static_cast<int>(PlayerDirection::IDLE);
+  }
+
+  if (mTargetX == mBox.x && mTargetY == mBox.y) {
+    mMoving = false;
+    mDirection = static_cast<int>(PlayerDirection::IDLE);
   }
 }
 

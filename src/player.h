@@ -18,7 +18,7 @@ class Player {
     static const int PLAYER_HEIGHT = 32;
     static const int PLAYER_WIDTH = 32;
 
-    static const int PLAYER_VEL = 10;
+    static const int PLAYER_VEL = 4;
 
     Player(Texture* playerTexture, SDL_Rect** playerClips);
 
@@ -31,9 +31,11 @@ class Player {
     void render(SDL_Rect& camera, int frame);
 
   private:
-    int mVelX, mVelY;
-
     int mDirection;
+
+    bool mMoving;
+
+    int mTargetX, mTargetY;
 
     SDL_Rect mBox;
 
