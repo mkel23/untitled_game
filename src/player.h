@@ -28,7 +28,7 @@ class Player {
 
     void setCamera(SDL_Rect& camera);
 
-    void render(SDL_Rect& camera, int frame);
+    void render(SDL_Renderer* renderer, SDL_Rect& camera, int frame);
 
   private:
     int mDirection;

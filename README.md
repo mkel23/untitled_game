@@ -36,7 +36,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
 - [X] Clean up Makefile
   - [ ] Look into CMake/SCons
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
-- [ ] Separate globals/functions in `main.cpp` to Game class
+- [X] Separate globals/functions in `main.cpp` to Game class
 - [X] Grid Based Movement (a la Pokemon)
   - [ ] Figure nice way to hold down key to keep moving, but stop during next tile when released
 - [ ] Undecided Game Engine Parts

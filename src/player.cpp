@@ -109,6 +109,6 @@ void Player::setCamera(SDL_Rect& camera) {
   }
 }
 
-void Player::render(SDL_Rect& camera, int frame) {
-  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, &mPlayerClips[mDirection][frame]);
+void Player::render(SDL_Renderer* renderer, SDL_Rect& camera, int frame) {
+  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, renderer, &mPlayerClips[mDirection][frame]);
 }

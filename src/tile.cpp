@@ -15,9 +15,9 @@ Tile::Tile(Texture* tileTexture, SDL_Rect* tileClips, int x, int y, int tileType
   mTileClips = tileClips;
 }
 
-void Tile::render(SDL_Rect& camera) {
+void Tile::render(SDL_Renderer* renderer, SDL_Rect& camera) {
   if (checkCollision(camera, mBox)) {
-    mTileTexture->render(mBox.x - camera.x, mBox.y - camera.y, &mTileClips[mType]);
+    mTileTexture->render(mBox.x - camera.x, mBox.y - camera.y, renderer, &mTileClips[mType]);
   }
 }
 

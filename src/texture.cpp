@@ -10,7 +10,7 @@ Texture::~Texture() {
   free();
 }
 
-bool Texture::loadFromFile(std::string path) {
+bool Texture::loadFromFile(SDL_Renderer* renderer, std::string path) {
   free();
 
   SDL_Texture* newTexture = NULL;
@@ -18,7 +18,7 @@ bool Texture::loadFromFile(std::string path) {
   SDL_Surface* loadedSurface = IMG_Load(path.c_str());
 
   SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
-  newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
+  newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
 
   mWidth = loadedSurface->w;
   mHeight = loadedSurface->h;
@@ -49,7 +49,7 @@ void Texture::setAlpha(Uint8 alpha) {
   SDL_SetTextureAlphaMod(mTexture, alpha);
 }
 
-void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
+void Texture::render(int x, int y, SDL_Renderer* renderer, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
   SDL_Rect renderQuad = { x, y, mWidth, mHeight };
 
   if (clip != NULL) {
@@ -57,7 +57,7 @@ void Texture::render(int x, int y, SDL_Rect* clip, double angle, SDL_Point* cent
     renderQuad.h = clip->h;
   }
 
-  SDL_RenderCopyEx(gRenderer, mTexture, clip, &renderQuad, angle, center, flip);
+  SDL_RenderCopyEx(renderer, mTexture, clip, &renderQuad, angle, center, flip);
 }
 
 int Texture::getWidth() {

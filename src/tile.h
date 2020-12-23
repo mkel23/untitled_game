@@ -20,7 +20,7 @@ class Tile {
 
     Tile(Texture* tileTexture, SDL_Rect* tileClips, int x, int y, int tileType);
 
-    void render(SDL_Rect& camera);
+    void render(SDL_Renderer* renderer, SDL_Rect& camera);
 
     int getType();
 
