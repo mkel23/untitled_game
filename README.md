@@ -46,17 +46,20 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [X] Texture Loading/Rendering
   - [ ] Input/Controls
     - [X] Movement
+    - [ ] Input Debugger in order to help with keyboard inputs
+    - [ ] Decide if we want mouse support, or everything keyboard? Leaning keyboard only
   - [ ] Menu System
   - [ ] Saving/Loading (can only save when not in combat)
     - [ ] X and Y position
-    - [ ] Map state
+    - [ ] Map/Level state
   - [ ] Probably a Dialog System once I decide some story stuff
 - [ ] Story
   - [ ] Come up with some basic themes/rules
   - [ ] Decide what "progress" means in the game
     - e.g., does progess mean levels? does progress mean completing the linear story? main story with side quests?
 - [ ] Sprite sheet
-  - [ ] Get a "guided" sprite sheet up first
+  - [X] Get a simple sprite sheet up first
+  - [ ] Directional Idle sprites
 - [ ] Combat
   - [ ] Combat skill/style based on RS vs turn based combat a la pokemon
 - [ ] Inventory/Items
