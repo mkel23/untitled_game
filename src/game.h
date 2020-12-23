@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "player.h"
 #include "texture.h"
 #include "tile.h"
 
@@ -29,7 +30,7 @@ class Game {
 
     Texture mTileSheetTexture, mPlayerTexture;
 
-    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES], mPlayerClips[5][4];
+    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES], mPlayerClips[static_cast<int>(PlayerDirection::TOTAL)][Player::PLAYER_SPRITE_FRAMES];
 
     SDL_Window* mWindow = NULL;
 

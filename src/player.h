@@ -10,7 +10,8 @@ enum class PlayerDirection {
   UP,
   DOWN,
   LEFT,
-  RIGHT
+  RIGHT,
+  TOTAL
 };
 
 class Player {
@@ -19,6 +20,8 @@ class Player {
     static const int PLAYER_WIDTH = 32;
 
     static const int PLAYER_VEL = 4;
+
+    static const int PLAYER_SPRITE_FRAMES = 4;
 
     Player(Texture* playerTexture, SDL_Rect** playerClips);
 

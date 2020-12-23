@@ -28,8 +28,8 @@ void Game::run() {
   bool quit = false;
   int frame = 0;
 
-  SDL_Rect* nestedPlayerClips[5];
-  for (int i = 0; i < 5; ++i) {
+  SDL_Rect* nestedPlayerClips[static_cast<int>(PlayerDirection::TOTAL)];
+  for (int i = 0; i < static_cast<int>(PlayerDirection::TOTAL); ++i) {
     nestedPlayerClips[i] = mPlayerClips[i];
   }
 
@@ -61,7 +61,7 @@ void Game::run() {
 
     ++frame;
 
-    if (frame / 8 >= PLAYER_SPRITE_FRAMES) {
+    if (frame / 8 >= Player::PLAYER_SPRITE_FRAMES) {
       frame = 0;
     }
 
@@ -157,111 +157,14 @@ bool Game::loadMedia() {
   if (!mPlayerTexture.loadFromFile(mRenderer, "res/img/player.png")) {
     success = false;
   } else {
-    // TODO: clean this up w/ some frooty loops
-    // IDLE
-    mPlayerClips[0][0].x = 0;
-    mPlayerClips[0][0].y = 0;
-    mPlayerClips[0][0].w = 32;
-    mPlayerClips[0][0].h = 32;
-
-    mPlayerClips[0][1].x = 32;
-    mPlayerClips[0][1].y = 0;
-    mPlayerClips[0][1].w = 32;
-    mPlayerClips[0][1].h = 32;
-
-    mPlayerClips[0][2].x = 64;
-    mPlayerClips[0][2].y = 0;
-    mPlayerClips[0][2].w = 32;
-    mPlayerClips[0][2].h = 32;
-
-    mPlayerClips[0][3].x = 96;
-    mPlayerClips[0][3].y = 0;
-    mPlayerClips[0][3].w = 32;
-    mPlayerClips[0][3].h = 32;
-
-    // UP
-    mPlayerClips[1][0].x = 0;
-    mPlayerClips[1][0].y = 32;
-    mPlayerClips[1][0].w = 32;
-    mPlayerClips[1][0].h = 32;
-
-    mPlayerClips[1][1].x = 32;
-    mPlayerClips[1][1].y = 32;
-    mPlayerClips[1][1].w = 32;
-    mPlayerClips[1][1].h = 32;
-
-    mPlayerClips[1][2].x = 64;
-    mPlayerClips[1][2].y = 32;
-    mPlayerClips[1][2].w = 32;
-    mPlayerClips[1][2].h = 32;
-
-    mPlayerClips[1][3].x = 96;
-    mPlayerClips[1][3].y = 32;
-    mPlayerClips[1][3].w = 32;
-    mPlayerClips[1][3].h = 32;
-
-    // DOWN
-    mPlayerClips[2][0].x = 0;
-    mPlayerClips[2][0].y = 64;
-    mPlayerClips[2][0].w = 32;
-    mPlayerClips[2][0].h = 32;
-
-    mPlayerClips[2][1].x = 32;
-    mPlayerClips[2][1].y = 64;
-    mPlayerClips[2][1].w = 32;
-    mPlayerClips[2][1].h = 32;
-
-    mPlayerClips[2][2].x = 64;
-    mPlayerClips[2][2].y = 64;
-    mPlayerClips[2][2].w = 32;
-    mPlayerClips[2][2].h = 32;
-
-    mPlayerClips[2][3].x = 96;
-    mPlayerClips[2][3].y = 64;
-    mPlayerClips[2][3].w = 32;
-    mPlayerClips[2][3].h = 32;
-
-    // LEFT
-    mPlayerClips[3][0].x = 0;
-    mPlayerClips[3][0].y = 96;
-    mPlayerClips[3][0].w = 32;
-    mPlayerClips[3][0].h = 32;
-
-    mPlayerClips[3][1].x = 32;
-    mPlayerClips[3][1].y = 96;
-    mPlayerClips[3][1].w = 32;
-    mPlayerClips[3][1].h = 32;
-
-    mPlayerClips[3][2].x = 64;
-    mPlayerClips[3][2].y = 96;
-    mPlayerClips[3][2].w = 32;
-    mPlayerClips[3][2].h = 32;
-
-    mPlayerClips[3][3].x = 96;
-    mPlayerClips[3][3].y = 96;
-    mPlayerClips[3][3].w = 32;
-    mPlayerClips[3][3].h = 32;
-
-    // RIGHT
-    mPlayerClips[4][0].x = 0;
-    mPlayerClips[4][0].y = 128;
-    mPlayerClips[4][0].w = 32;
-    mPlayerClips[4][0].h = 32;
-
-    mPlayerClips[4][1].x = 32;
-    mPlayerClips[4][1].y = 128;
-    mPlayerClips[4][1].w = 32;
-    mPlayerClips[4][1].h = 32;
-
-    mPlayerClips[4][2].x = 64;
-    mPlayerClips[4][2].y = 128;
-    mPlayerClips[4][2].w = 32;
-    mPlayerClips[4][2].h = 32;
-
-    mPlayerClips[4][3].x = 96;
-    mPlayerClips[4][3].y = 128;
-    mPlayerClips[4][3].w = 32;
-    mPlayerClips[4][3].h = 32;
+    for (int direction = 0; direction < static_cast<int>(PlayerDirection::TOTAL); ++direction) {
+      for (int spriteFrame = 0; spriteFrame < Player::PLAYER_SPRITE_FRAMES; ++spriteFrame) {
+        mPlayerClips[direction][spriteFrame].x = spriteFrame * 32;
+        mPlayerClips[direction][spriteFrame].y = direction * 32;
+        mPlayerClips[direction][spriteFrame].w = Player::PLAYER_WIDTH;
+        mPlayerClips[direction][spriteFrame].h = Player::PLAYER_HEIGHT;
+      }
+    }
   }
 
   return success;
