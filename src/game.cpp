@@ -24,10 +24,12 @@ void Game::renderDebugGrid(SDL_Rect& camera) {
 }
 
 void Game::run() {
+  const Uint8* keystates = SDL_GetKeyboardState(NULL);
   SDL_Event e;
   bool quit = false;
   int frame = 0;
 
+  // TODO: this can probably live on Player once I get better at initializing arrays in a constructor?
   SDL_Rect* nestedPlayerClips[static_cast<int>(PlayerDirection::TOTAL)];
   for (int i = 0; i < static_cast<int>(PlayerDirection::TOTAL); ++i) {
     nestedPlayerClips[i] = mPlayerClips[i];
@@ -41,8 +43,17 @@ void Game::run() {
       if (e.type == SDL_QUIT) {
         quit = true;
       }
+    }
 
-      player.handleEvent(e);
+    // TODO: move this into an input handler. Also, might need SDL_PumpEvents() inside that handler because it doesn't know we're polling above?
+    if (keystates[SDL_SCANCODE_W]) {
+      player.handleEvent(PlayerDirection::UP);
+    } else if (keystates[SDL_SCANCODE_S]) {
+      player.handleEvent(PlayerDirection::DOWN);
+    } else if (keystates[SDL_SCANCODE_A]) {
+      player.handleEvent(PlayerDirection::LEFT);
+    } else if (keystates[SDL_SCANCODE_D]) {
+      player.handleEvent(PlayerDirection::RIGHT);
     }
 
     player.move(mTiles);

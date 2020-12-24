@@ -38,7 +38,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
 - [X] Separate globals/functions in `main.cpp` to Game class
 - [X] Grid Based Movement (a la Pokemon)
-  - [ ] Figure nice way to hold down key to keep moving, but stop during next tile when released
+  - [X] Figure nice way to hold down key to keep moving, but stop during next tile when released
 - [ ] Undecided Game Engine Parts
   - [X] Extract classes out to their own files
   - [ ] Game State
@@ -51,6 +51,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [ ] Menu System
   - [ ] Saving/Loading (can only save when not in combat)
     - [ ] X and Y position
+    - [ ] Player Direction
     - [ ] Map/Level state
   - [ ] Probably a Dialog System once I decide some story stuff
 - [ ] Story

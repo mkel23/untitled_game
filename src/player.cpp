@@ -15,35 +15,41 @@ Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
   mBox.w = PLAYER_WIDTH;
   mBox.h = PLAYER_HEIGHT;
 
-  mDirection = static_cast<int>(PlayerDirection::IDLE);
+  mDirection = static_cast<int>(PlayerDirection::DOWN);
 
   mMoving = false;
 }
 
-void Player::handleEvent(SDL_Event& e) {
-  if (e.type == SDL_KEYDOWN && e.key.repeat == 0 && !mMoving) {
-    switch (e.key.keysym.sym) {
-      case SDLK_w:
+void Player::handleEvent(PlayerDirection direction) {
+  switch (static_cast<int>(direction)) {
+    case static_cast<int>(PlayerDirection::UP):
+      if (mTargetY == mBox.y) {
         mTargetY -= PLAYER_HEIGHT;
         mDirection = static_cast<int>(PlayerDirection::UP);
         mMoving = true;
-        break;
-      case SDLK_s:
+      }
+      break;
+    case static_cast<int>(PlayerDirection::DOWN):
+      if (mTargetY == mBox.y) {
         mTargetY += PLAYER_HEIGHT;
         mDirection = static_cast<int>(PlayerDirection::DOWN);
         mMoving = true;
-        break;
-      case SDLK_a:
+      }
+      break;
+    case static_cast<int>(PlayerDirection::LEFT):
+      if (mTargetX == mBox.x) {
         mTargetX -= PLAYER_WIDTH;
         mDirection = static_cast<int>(PlayerDirection::LEFT);
         mMoving = true;
-        break;
-      case SDLK_d:
+      }
+      break;
+    case static_cast<int>(PlayerDirection::RIGHT):
+      if (mTargetX == mBox.x) {
         mTargetX += PLAYER_WIDTH;
         mDirection = static_cast<int>(PlayerDirection::RIGHT);
         mMoving = true;
-        break;
-    }
+      }
+      break;
   }
 }
 
@@ -60,10 +66,10 @@ void Player::move(Tile* tiles[]) {
 
   mBox.x += velX;
 
+  // TODO: for some reason, when moving vertically, mBox.x is insanely large. Inverse will be true below. Doesn't seem like an issue right now?
   if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
     mBox.x -= velX;
-    mMoving = false;
-    mDirection = static_cast<int>(PlayerDirection::IDLE);
+    mTargetX = mBox.x;
   }
 
   if (mTargetY > mBox.y) {
@@ -78,13 +84,11 @@ void Player::move(Tile* tiles[]) {
 
   if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, tiles)) {
     mBox.y -= velY;
-    mMoving = false;
-    mDirection = static_cast<int>(PlayerDirection::IDLE);
+    mTargetY = mBox.y;
   }
 
   if (mTargetX == mBox.x && mTargetY == mBox.y) {
     mMoving = false;
-    mDirection = static_cast<int>(PlayerDirection::IDLE);
   }
 }
 
@@ -110,5 +114,7 @@ void Player::setCamera(SDL_Rect& camera) {
 }
 
 void Player::render(SDL_Renderer* renderer, SDL_Rect& camera, int frame) {
-  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, renderer, &mPlayerClips[mDirection][frame]);
+  int playerFrame = mMoving ? frame : 0;
+
+  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, renderer, &mPlayerClips[mDirection][playerFrame]);
 }

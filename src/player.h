@@ -6,7 +6,6 @@
 #include "tile.h"
 
 enum class PlayerDirection {
-  IDLE,
   UP,
   DOWN,
   LEFT,
@@ -25,7 +24,7 @@ class Player {
 
     Player(Texture* playerTexture, SDL_Rect** playerClips);
 
-    void handleEvent(SDL_Event& e);
+    void handleEvent(PlayerDirection direction);
 
     void move(Tile* tiles[]);
 
