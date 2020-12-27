@@ -3,12 +3,21 @@
 #include "constants.h"
 #include "player.h"
 #include "game.h"
+#include "input_handler.h"
 
-Game::Game() {
-  setTiles();
+Game* Game::sInstance = 0;
+
+Game* Game::Instance() {
+  if (sInstance == 0) {
+    sInstance = new Game();
+  }
+
+  return sInstance;
 }
 
 bool Game::setup() {
+  mRunning = true;
+  setTiles();
   return init() && loadMedia();
 }
 
@@ -24,9 +33,6 @@ void Game::renderDebugGrid(SDL_Rect& camera) {
 }
 
 void Game::run() {
-  const Uint8* keystates = SDL_GetKeyboardState(NULL);
-  SDL_Event e;
-  bool quit = false;
   int frame = 0;
 
   // TODO: this can probably live on Player once I get better at initializing arrays in a constructor?
@@ -38,24 +44,10 @@ void Game::run() {
   Player player(&mPlayerTexture, nestedPlayerClips);
   SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
-  while (!quit) {
-    while (SDL_PollEvent(&e)) {
-      if (e.type == SDL_QUIT) {
-        quit = true;
-      }
-    }
+  while (mRunning) {
+    InputHandler::Instance()->update();
 
-    // TODO: move this into an input handler. Also, might need SDL_PumpEvents() inside that handler because it doesn't know we're polling above?
-    if (keystates[SDL_SCANCODE_W]) {
-      player.handleEvent(PlayerDirection::UP);
-    } else if (keystates[SDL_SCANCODE_S]) {
-      player.handleEvent(PlayerDirection::DOWN);
-    } else if (keystates[SDL_SCANCODE_A]) {
-      player.handleEvent(PlayerDirection::LEFT);
-    } else if (keystates[SDL_SCANCODE_D]) {
-      player.handleEvent(PlayerDirection::RIGHT);
-    }
-
+    player.update();
     player.move(mTiles);
     player.setCamera(camera);
 
@@ -207,4 +199,8 @@ void Game::setTiles() {
       y += Tile::TILE_HEIGHT;
     }
   }
+}
+
+void Game::quit() {
+  mRunning = false;
 }

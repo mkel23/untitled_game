@@ -24,7 +24,7 @@ class Player {
 
     Player(Texture* playerTexture, SDL_Rect** playerClips);
 
-    void handleEvent(PlayerDirection direction);
+    void update();
 
     void move(Tile* tiles[]);
 

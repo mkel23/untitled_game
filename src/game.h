@@ -9,7 +9,10 @@ class Game {
   public:
     static const int TOTAL_TILES = 1200;
 
-    Game();
+    static Game* Instance();
+    Game(Game&) = delete;
+    void operator=(const Game&) = delete;
+    Game& operator=(Game&&) = delete;
 
     bool setup();
 
@@ -17,7 +20,14 @@ class Game {
 
     void teardown();
 
+    void quit();
+
   private:
+    Game() {};
+    ~Game() {};
+
+    void operator delete(void *) {};
+
     bool init();
 
     bool loadMedia();
@@ -25,6 +35,10 @@ class Game {
     void setTiles();
 
     void renderDebugGrid(SDL_Rect& camera);
+
+    bool mRunning;
+
+    static Game* sInstance;
 
     Tile* mTiles[TOTAL_TILES];
 

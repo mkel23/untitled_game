@@ -39,7 +39,6 @@ bool checkCollision(SDL_Rect a, SDL_Rect b) {
 
 bool touchesWall(SDL_Rect box, Tile* tiles[]) {
   for (int i = 0; i < Game::TOTAL_TILES; ++i) {
-    // TODO: cleaner way to do this instead of type casting?
     if ((tiles[i]->getType() == static_cast<int>(TileTypes::ROCK))) {
       if (checkCollision(box, tiles[i]->getBox())) {
         return true;

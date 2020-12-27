@@ -1,5 +1,6 @@
 #include "constants.h"
 #include "collision_manager.h"
+#include "input_handler.h"
 #include "player.h"
 
 Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
@@ -20,41 +21,36 @@ Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
   mMoving = false;
 }
 
-void Player::handleEvent(PlayerDirection direction) {
-  switch (static_cast<int>(direction)) {
-    case static_cast<int>(PlayerDirection::UP):
-      if (mTargetY == mBox.y) {
-        mTargetY -= PLAYER_HEIGHT;
-        mDirection = static_cast<int>(PlayerDirection::UP);
-        mMoving = true;
-      }
-      break;
-    case static_cast<int>(PlayerDirection::DOWN):
-      if (mTargetY == mBox.y) {
-        mTargetY += PLAYER_HEIGHT;
-        mDirection = static_cast<int>(PlayerDirection::DOWN);
-        mMoving = true;
-      }
-      break;
-    case static_cast<int>(PlayerDirection::LEFT):
-      if (mTargetX == mBox.x) {
-        mTargetX -= PLAYER_WIDTH;
-        mDirection = static_cast<int>(PlayerDirection::LEFT);
-        mMoving = true;
-      }
-      break;
-    case static_cast<int>(PlayerDirection::RIGHT):
-      if (mTargetX == mBox.x) {
-        mTargetX += PLAYER_WIDTH;
-        mDirection = static_cast<int>(PlayerDirection::RIGHT);
-        mMoving = true;
-      }
-      break;
+void Player::update() {
+  if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_W)) {
+    if (mTargetY == mBox.y) {
+      mTargetY -= PLAYER_HEIGHT;
+      mDirection = static_cast<int>(PlayerDirection::UP);
+      mMoving = true;
+    }
+  } else if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_S)) {
+    if (mTargetY == mBox.y) {
+      mTargetY += PLAYER_HEIGHT;
+      mDirection = static_cast<int>(PlayerDirection::DOWN);
+      mMoving = true;
+    }
+  } else if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_A)) {
+    if (mTargetX == mBox.x) {
+      mTargetX -= PLAYER_WIDTH;
+      mDirection = static_cast<int>(PlayerDirection::LEFT);
+      mMoving = true;
+    }
+  } else if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_D)) {
+    if (mTargetX == mBox.x) {
+      mTargetX += PLAYER_WIDTH;
+      mDirection = static_cast<int>(PlayerDirection::RIGHT);
+      mMoving = true;
+    }
   }
 }
 
 void Player::move(Tile* tiles[]) {
-  int velX, velY;
+  int velX = 0, velY = 0;
 
   if (mTargetX > mBox.x) {
     velX = PLAYER_VEL;
@@ -66,7 +62,6 @@ void Player::move(Tile* tiles[]) {
 
   mBox.x += velX;
 
-  // TODO: for some reason, when moving vertically, mBox.x is insanely large. Inverse will be true below. Doesn't seem like an issue right now?
   if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
     mBox.x -= velX;
     mTargetX = mBox.x;
