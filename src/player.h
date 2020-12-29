@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <SDL2/SDL.h>
+#include <vector>
 #include "texture.h"
 #include "tile.h"
 
@@ -22,15 +23,16 @@ class Player {
 
     static const int PLAYER_SPRITE_FRAMES = 4;
 
-    Player(Texture* playerTexture, SDL_Rect** playerClips);
+    Player();
+    ~Player();
 
     void update();
 
-    void move(Tile* tiles[]);
+    void move();
 
-    void setCamera(SDL_Rect& camera);
+    void setCamera();
 
-    void render(SDL_Renderer* renderer, SDL_Rect& camera, int frame);
+    void render(int frame);
 
   private:
     int mDirection;
@@ -41,8 +43,11 @@ class Player {
 
     SDL_Rect mBox;
 
-    Texture* mPlayerTexture;
-    SDL_Rect** mPlayerClips;
+    Texture mPlayerTexture;
+
+    std::vector<std::vector<SDL_Rect>> mPlayerClips;
+
+    void loadMedia();
 };
 
 #endif

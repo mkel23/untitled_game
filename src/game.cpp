@@ -1,9 +1,9 @@
 #include <fstream>
 #include <SDL2/SDL_ttf.h>
 #include "constants.h"
-#include "player.h"
-#include "game.h"
 #include "input_handler.h"
+#include "play_state.h"
+#include "game.h"
 
 Game* Game::sInstance = 0;
 
@@ -16,52 +16,59 @@ Game* Game::Instance() {
 }
 
 bool Game::setup() {
+  bool success = true;
+
+  if (!init()) {
+    success = false;
+  }
+
+  if (!loadMedia()) {
+    success = false;
+  }
+
+  // TODO: this should be replaced with MainMenuState
+  mGameStateManager.pushState(new PlayState);
   mRunning = true;
+  mCamera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
   setTiles();
-  return init() && loadMedia();
+
+  return success;
 }
 
-void Game::renderDebugGrid(SDL_Rect& camera) {
+void Game::renderDebugGrid() {
   SDL_SetRenderDrawColor(mRenderer, 0xFF, 0x00, 0x00, 0xFF);
   for (int i = 0; i < LEVEL_HEIGHT / Tile::TILE_HEIGHT; i++) {
-    SDL_RenderDrawLine(mRenderer, 0 - camera.x, i*32 - camera.y, LEVEL_WIDTH - camera.x, i*32 - camera.y);
+    SDL_RenderDrawLine(mRenderer, 0 - mCamera.x, i*32 - mCamera.y, LEVEL_WIDTH - mCamera.x, i*32 - mCamera.y);
   }
 
   for (int i = 0; i < LEVEL_WIDTH / Tile::TILE_WIDTH; i++) {
-    SDL_RenderDrawLine(mRenderer, i*32 - camera.x, 0 - camera.y, i*32 - camera.x, LEVEL_HEIGHT - camera.y);
+    SDL_RenderDrawLine(mRenderer, i*32 - mCamera.x, 0 - mCamera.y, i*32 - mCamera.x, LEVEL_HEIGHT - mCamera.y);
   }
 }
 
 void Game::run() {
   int frame = 0;
 
-  // TODO: this can probably live on Player once I get better at initializing arrays in a constructor?
-  SDL_Rect* nestedPlayerClips[static_cast<int>(PlayerDirection::TOTAL)];
-  for (int i = 0; i < static_cast<int>(PlayerDirection::TOTAL); ++i) {
-    nestedPlayerClips[i] = mPlayerClips[i];
-  }
-
-  Player player(&mPlayerTexture, nestedPlayerClips);
-  SDL_Rect camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
-
   while (mRunning) {
     InputHandler::Instance()->update();
 
-    player.update();
-    player.move(mTiles);
-    player.setCamera(camera);
+    mGameStateManager.update();
 
+    /* TODO: should place this code inside of PlayState */
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(mRenderer);
 
     for (int i = 0; i < TOTAL_TILES; ++i) {
-      mTiles[i]->render(mRenderer, camera);
+      mTiles[i]->render(mRenderer, mCamera);
     }
 
-    player.render(mRenderer, camera, frame / 8);
+    renderDebugGrid();
+    /* TODO: END */
 
-    renderDebugGrid(camera);
+    mGameStateManager.render(frame / 8);
 
+    // TODO: clean up this frame stuff to account for capped fps
     ++frame;
 
     if (frame / 8 >= Player::PLAYER_SPRITE_FRAMES) {
@@ -74,7 +81,6 @@ void Game::run() {
 
 void Game::teardown() {
   mTileSheetTexture.free();
-  mPlayerTexture.free();
 
   for (int i = 0; i < TOTAL_TILES; ++i) {
     if (mTiles[i] != NULL) {
@@ -157,19 +163,6 @@ bool Game::loadMedia() {
     mTileClips[tallGrass].h = 32;
   }
 
-  if (!mPlayerTexture.loadFromFile(mRenderer, "res/img/player.png")) {
-    success = false;
-  } else {
-    for (int direction = 0; direction < static_cast<int>(PlayerDirection::TOTAL); ++direction) {
-      for (int spriteFrame = 0; spriteFrame < Player::PLAYER_SPRITE_FRAMES; ++spriteFrame) {
-        mPlayerClips[direction][spriteFrame].x = spriteFrame * 32;
-        mPlayerClips[direction][spriteFrame].y = direction * 32;
-        mPlayerClips[direction][spriteFrame].w = Player::PLAYER_WIDTH;
-        mPlayerClips[direction][spriteFrame].h = Player::PLAYER_HEIGHT;
-      }
-    }
-  }
-
   return success;
 }
 
@@ -203,4 +196,16 @@ void Game::setTiles() {
 
 void Game::quit() {
   mRunning = false;
+}
+
+SDL_Renderer* Game::renderer() {
+  return mRenderer;
+}
+
+SDL_Rect* Game::camera() {
+  return &mCamera;
+}
+
+Tile** Game::tiles() {
+  return mTiles;
 }

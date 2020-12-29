@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "player.h"
+#include "game_state_manager.h"
 #include "texture.h"
 #include "tile.h"
 
@@ -22,6 +22,12 @@ class Game {
 
     void quit();
 
+    SDL_Renderer* renderer();
+
+    SDL_Rect* camera();
+
+    Tile** tiles();
+
   private:
     Game() {};
     ~Game() {};
@@ -34,7 +40,7 @@ class Game {
 
     void setTiles();
 
-    void renderDebugGrid(SDL_Rect& camera);
+    void renderDebugGrid();
 
     bool mRunning;
 
@@ -42,13 +48,17 @@ class Game {
 
     Tile* mTiles[TOTAL_TILES];
 
-    Texture mTileSheetTexture, mPlayerTexture;
+    Texture mTileSheetTexture;
 
-    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES], mPlayerClips[static_cast<int>(PlayerDirection::TOTAL)][Player::PLAYER_SPRITE_FRAMES];
+    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES];
 
     SDL_Window* mWindow = NULL;
 
     SDL_Renderer* mRenderer = NULL;
+
+    GameStateManager mGameStateManager;
+
+    SDL_Rect mCamera;
 };
 
 #endif

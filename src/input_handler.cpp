@@ -30,6 +30,7 @@ bool InputHandler::isKeyDown(SDL_Scancode key) {
 void InputHandler::update() {
   SDL_Event e;
 
+  // TODO: mouse move events, mouse click events (mostly for menu right now - menus can handle keyboard events later?)
   while (SDL_PollEvent(&e)) {
     switch (e.type) {
       case SDL_QUIT:

@@ -19,6 +19,8 @@ but...I gotta start with the first one, which is a lot, based on my ideas and TO
 ## Makefile
 Yeah...I know. It's not the greatest right now, but will update to (hopefully) be portable. Right now, I'm on macOS Catalina 10.15.1 and using Homebrew to install these SDL packages.
 
+I've decided to just keep using Make for now, and revisit CMake or SCons later, instead of wasting my time on portability, but not actually getting anything done.
+
 `make game`  
 `./play`
 
@@ -37,6 +39,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [ ] Look into CMake/SCons
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
 - [X] Separate globals/functions in `main.cpp` to Game class
+- [ ] Start using vectors, idk why I haven't been doing that before :shrug:
 - [X] Grid Based Movement (a la Pokemon)
   - [X] Figure nice way to hold down key to keep moving, but stop during next tile when released
 - [ ] Undecided Game Engine Parts

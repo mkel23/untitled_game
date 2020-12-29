@@ -1,11 +1,11 @@
 #include "constants.h"
 #include "collision_manager.h"
+#include "game.h"
 #include "input_handler.h"
 #include "player.h"
 
-Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
-  mPlayerTexture = playerTexture;
-  mPlayerClips = playerClips;
+Player::Player() {
+  loadMedia();
 
   mTargetX = 0;
   mTargetY = 0;
@@ -19,6 +19,26 @@ Player::Player(Texture* playerTexture, SDL_Rect** playerClips) {
   mDirection = static_cast<int>(PlayerDirection::DOWN);
 
   mMoving = false;
+}
+
+Player::~Player() {
+  mPlayerTexture.free();
+}
+
+void Player::loadMedia() {
+  mPlayerTexture.loadFromFile(Game::Instance()->renderer(), "res/img/player.png");
+
+  for (int direction = 0; direction < static_cast<int>(PlayerDirection::TOTAL); ++direction) {
+    mPlayerClips.push_back(std::vector<SDL_Rect>());
+    for (int spriteFrame = 0; spriteFrame < PLAYER_SPRITE_FRAMES; ++spriteFrame) {
+      SDL_Rect clip;
+      clip.x = spriteFrame * 32;
+      clip.y = direction * 32;
+      clip.w = PLAYER_WIDTH;
+      clip.h = PLAYER_HEIGHT;
+      mPlayerClips.back().push_back(clip);
+    }
+  }
 }
 
 void Player::update() {
@@ -49,7 +69,8 @@ void Player::update() {
   }
 }
 
-void Player::move(Tile* tiles[]) {
+void Player::move() {
+  Tile** tiles = Game::Instance()->tiles();
   int velX = 0, velY = 0;
 
   if (mTargetX > mBox.x) {
@@ -87,29 +108,34 @@ void Player::move(Tile* tiles[]) {
   }
 }
 
-void Player::setCamera(SDL_Rect& camera) {
-  camera.x = (mBox.x + PLAYER_WIDTH / 2) - SCREEN_WIDTH / 2;
-  camera.y = (mBox.y + PLAYER_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+void Player::setCamera() {
+  // TODO: this feels a little dirty. Should have a function on Game that allows to set X/Y coords on camera
+  SDL_Rect* camera = Game::Instance()->camera();
 
-  if (camera.x < 0) {
-    camera.x = 0;
+  camera->x = (mBox.x + PLAYER_WIDTH / 2) - SCREEN_WIDTH / 2;
+  camera->y = (mBox.y + PLAYER_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+
+  if (camera->x < 0) {
+    camera->x = 0;
   }
 
-  if (camera.x > LEVEL_WIDTH - camera.w) {
-    camera.x = LEVEL_WIDTH - camera.w;
+  if (camera->x > LEVEL_WIDTH - camera->w) {
+    camera->x = LEVEL_WIDTH - camera->w;
   }
 
-  if (camera.y < 0) {
-    camera.y = 0;
+  if (camera->y < 0) {
+    camera->y = 0;
   }
 
-  if (camera.y > LEVEL_HEIGHT - camera.h) {
-    camera.y = LEVEL_HEIGHT - camera.h;
+  if (camera->y > LEVEL_HEIGHT - camera->h) {
+    camera->y = LEVEL_HEIGHT - camera->h;
   }
 }
 
-void Player::render(SDL_Renderer* renderer, SDL_Rect& camera, int frame) {
+void Player::render(int frame) {
   int playerFrame = mMoving ? frame : 0;
+  SDL_Renderer* renderer = Game::Instance()->renderer();
+  SDL_Rect* camera = Game::Instance()->camera();
 
-  mPlayerTexture->render(mBox.x - camera.x, mBox.y - camera.y, renderer, &mPlayerClips[mDirection][playerFrame]);
+  mPlayerTexture.render(mBox.x - camera->x, mBox.y - camera->y, renderer, &mPlayerClips[mDirection][playerFrame]);
 }
