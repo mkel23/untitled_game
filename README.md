@@ -40,23 +40,30 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [ ] Look into CMake/SCons
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)
 - [X] Separate globals/functions in `main.cpp` to Game class
-- [ ] Start using vectors, idk why I haven't been doing that before :shrug:
+- [X] Start using vectors, idk why I haven't been doing that before :shrug:
 - [X] Grid Based Movement (a la Pokemon)
   - [X] Figure nice way to hold down key to keep moving, but stop during next tile when released
 - [ ] Undecided Game Engine Parts
   - [X] Extract classes out to their own files
-  - [ ] Game State
+  - [X] Game State
   - [ ] Sound
   - [X] Texture Loading/Rendering
-  - [ ] Input/Controls
+  - [X] Input/Controls
     - [X] Movement
-    - [ ] Input Debugger in order to help with keyboard inputs
-    - [ ] Decide if we want mouse support, or everything keyboard? Leaning keyboard only
+    - [X] Decide if we want mouse support, or everything keyboard? Leaning keyboard only
   - [ ] Menu System
+    - [X] Main Menu
+    - [X] Pause Menu
+    - [ ] Controls Menu (just display and esc for back)
+    - [ ] Extract Menu component out
+      - [ ] Function to add buttons (say, text and font only). Handles spacing and everything
+      - [ ] Add hover effects to buttons
+      - [ ] Display menu title
   - [ ] Saving/Loading (can only save when not in combat)
     - [ ] X and Y position
     - [ ] Player Direction
     - [ ] Map/Level state
+    - [ ] Hook up menu buttons
   - [ ] Probably a Dialog System once I decide some story stuff
 - [ ] Story
   - [ ] Come up with some basic themes/rules
@@ -64,7 +71,8 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - e.g., does progess mean levels? does progress mean completing the linear story? main story with side quests?
 - [ ] Sprite sheet
   - [X] Get a simple sprite sheet up first
-  - [ ] Directional Idle sprites
+  - [X] Directional Idle sprites
+  - [ ] Actually get my own sprites going
 - [ ] Combat
   - [ ] Combat skill/style based on RS vs turn based combat a la pokemon
 - [ ] Inventory/Items
