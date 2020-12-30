@@ -1,6 +1,8 @@
 #include <fstream>
 #include "constants.h"
 #include "game.h"
+#include "input_handler.h"
+#include "pause_menu_state.h"
 #include "play_state.h"
 
 PlayState::PlayState() {
@@ -21,6 +23,10 @@ PlayState::~PlayState() {
 }
 
 void PlayState::update() {
+  if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
+    Game::Instance()->gameStateManager()->pushState(new PauseMenuState);
+  }
+
   mPlayer->update();
   mPlayer->move();
   mPlayer->setCamera();
