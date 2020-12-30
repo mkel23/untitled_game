@@ -26,6 +26,9 @@ class Game {
 
     GameStateManager* gameStateManager();
 
+  // TODO: game data should live in the game instance. we can set it up w/ some dummy data,
+  //   and maybe a nice way of indexing it. Can even extract it to it's own class and just keep a
+  //   pointer here.
   private:
     Game() {};
     ~Game() {};

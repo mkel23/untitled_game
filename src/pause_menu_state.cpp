@@ -57,7 +57,20 @@ void PauseMenuState::resumeGame() {
 }
 
 void PauseMenuState::saveGame() {
-  printf("TODO: implement loading and saving\n");
+  int totalData = 10;
+  Sint32 data[totalData];
+  SDL_RWops* file = SDL_RWFromFile("saves/save.bin", "w+b");
+
+  data[0] = 32;
+  data[1] = 32;
+
+  if (file != NULL) {
+    for (int i = 0; i < totalData; ++i) {
+      SDL_RWwrite(file, &data[i], sizeof(Sint32), 1);
+    }
+  }
+
+  SDL_RWclose(file);
 }
 
 void PauseMenuState::loadGame() {

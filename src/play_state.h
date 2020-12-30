@@ -8,7 +8,7 @@ class PlayState : public GameState {
   public:
     static const int TOTAL_TILES = 1200;
 
-    PlayState();
+    PlayState(int x = 0, int y = 0);
     ~PlayState();
 
     virtual void update();

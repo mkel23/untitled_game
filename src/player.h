@@ -23,7 +23,7 @@ class Player {
 
     static const int PLAYER_SPRITE_FRAMES = 4;
 
-    Player(Tile** tiles);
+    Player(Tile** tiles, int x, int y);
     ~Player();
 
     void update();

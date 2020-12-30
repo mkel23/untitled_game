@@ -54,7 +54,22 @@ void MainMenuState::newGame() {
 }
 
 void MainMenuState::loadGame() {
-  printf("TODO: implement loading and saving\n");
+  int totalData = 10;
+  Sint32 data[totalData];
+  SDL_RWops* file = SDL_RWFromFile("saves/save.bin", "r+b");
+
+  if (file == NULL) {
+    // TODO: error reading file (may not exist)
+    return;
+  }
+
+  for (int i = 0; i < totalData; ++i) {
+    SDL_RWread(file, &data[i], sizeof(Sint32), 1);
+  }
+
+  SDL_RWclose(file);
+
+  Game::Instance()->gameStateManager()->changeState(new PlayState(data[0], data[1]));
 }
 
 void MainMenuState::quit() {

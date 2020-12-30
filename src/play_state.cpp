@@ -5,10 +5,10 @@
 #include "pause_menu_state.h"
 #include "play_state.h"
 
-PlayState::PlayState() {
+PlayState::PlayState(int x, int y) {
   loadMedia();
   setTiles();
-  mPlayer = new Player(mTiles);
+  mPlayer = new Player(mTiles, x, y);
 }
 
 PlayState::~PlayState() {

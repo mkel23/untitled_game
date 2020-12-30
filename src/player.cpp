@@ -4,11 +4,11 @@
 #include "input_handler.h"
 #include "player.h"
 
-Player::Player(Tile** tiles) {
+Player::Player(Tile** tiles, int x, int y) {
   loadMedia();
 
-  mTargetX = 0;
-  mTargetY = 0;
+  mTargetX = x;
+  mTargetY = y;
 
   mBox.x = mTargetX;
   mBox.y = mTargetY;
