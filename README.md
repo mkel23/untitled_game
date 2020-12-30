@@ -48,6 +48,10 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [X] Game State
   - [ ] Sound
   - [X] Texture Loading/Rendering
+    - [ ] Change map data to allow for "doors"
+    - [ ] Level/Map class to deal with loading up tiles/maps
+    - [ ] Level Editor to help with making new environments
+    - [ ] Deal w/ doors and other levels/maps...can we learn how to do some sort of transition?
   - [X] Input/Controls
     - [X] Movement
     - [X] Decide if we want mouse support, or everything keyboard? Leaning keyboard only
@@ -64,6 +68,10 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [ ] Player Direction
     - [ ] Map/Level state
     - [ ] Hook up menu buttons
+  - [ ] Notifier
+    - [ ] Maybe useful when adding something to inventory? Like +1 and the item pic?
+    - [ ] Also for quest completion/etc.
+  - [ ] Potentially a TextureManager? Could "register" textures by name, then call the texture by name and have it render in a coord? Useful for when things are getting duped a lot/moved around between classes
   - [ ] Probably a Dialog System once I decide some story stuff
 - [ ] Story
   - [ ] Come up with some basic themes/rules
