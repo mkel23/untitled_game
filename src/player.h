@@ -23,7 +23,7 @@ class Player {
 
     static const int PLAYER_SPRITE_FRAMES = 4;
 
-    Player();
+    Player(Tile** tiles);
     ~Player();
 
     void update();
@@ -48,6 +48,8 @@ class Player {
     std::vector<std::vector<SDL_Rect>> mPlayerClips;
 
     void loadMedia();
+
+    Tile** mTiles;
 };
 
 #endif

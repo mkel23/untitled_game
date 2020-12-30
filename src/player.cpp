@@ -4,7 +4,7 @@
 #include "input_handler.h"
 #include "player.h"
 
-Player::Player() {
+Player::Player(Tile** tiles) {
   loadMedia();
 
   mTargetX = 0;
@@ -19,6 +19,8 @@ Player::Player() {
   mDirection = static_cast<int>(PlayerDirection::DOWN);
 
   mMoving = false;
+
+  mTiles = tiles;
 }
 
 Player::~Player() {
@@ -70,7 +72,6 @@ void Player::update() {
 }
 
 void Player::move() {
-  Tile** tiles = Game::Instance()->tiles();
   int velX = 0, velY = 0;
 
   if (mTargetX > mBox.x) {
@@ -83,7 +84,7 @@ void Player::move() {
 
   mBox.x += velX;
 
-  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, tiles)) {
+  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, mTiles)) {
     mBox.x -= velX;
     mTargetX = mBox.x;
   }
@@ -98,7 +99,7 @@ void Player::move() {
 
   mBox.y += velY;
 
-  if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, tiles)) {
+  if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, mTiles)) {
     mBox.y -= velY;
     mTargetY = mBox.y;
   }

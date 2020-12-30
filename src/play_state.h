@@ -6,11 +6,29 @@
 
 class PlayState : public GameState {
   public:
+    static const int TOTAL_TILES = 1200;
+
     PlayState();
+    ~PlayState();
+
     virtual void update();
+
     virtual void render(int frame);
+
   private:
     Player* mPlayer;
+
+    void setTiles();
+
+    void loadMedia();
+
+    void renderDebugGrid();
+
+    Tile* mTiles[TOTAL_TILES];
+
+    Texture mTileSheetTexture;
+
+    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES];
 };
 
 #endif

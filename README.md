@@ -30,6 +30,7 @@ I've decided to just keep using Make for now, and revisit CMake or SCons later, 
 * This is a hobby project, but I'm open to learning, so call me out on my bullshit.
 
 * Current assets found here (this will most likely change, just wanted to get something going for once): [https://opengameart.org/content/16xx16-tileset-pokemonzelda-styled](https://opengameart.org/content/16xx16-tileset-pokemonzelda-styled)
+* Font found here: [https://www.dafont.com/early-gameboy.font](https://www.dafont.com/early-gameboy.font)
 
 ## TODO
 What I've thought of so far, obviously going to change FREQUENTLY:

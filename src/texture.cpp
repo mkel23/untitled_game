@@ -1,3 +1,4 @@
+#include "game.h"
 #include "texture.h"
 
 Texture::Texture() {
@@ -26,6 +27,24 @@ bool Texture::loadFromFile(SDL_Renderer* renderer, std::string path) {
   SDL_FreeSurface(loadedSurface);
 
   mTexture = newTexture;
+  return mTexture != NULL;
+}
+
+bool Texture::loadFromRenderedText(std::string textureText, TTF_Font* font, SDL_Color textColor) {
+  free();
+
+  SDL_Surface* textSurface = TTF_RenderText_Solid(font, textureText.c_str(), textColor);
+
+  if (textSurface != NULL) {
+    mTexture = SDL_CreateTextureFromSurface(Game::Instance()->renderer(), textSurface);
+    if (mTexture != NULL) {
+      mWidth = textSurface->w;
+      mHeight = textSurface->h;
+    }
+
+    SDL_FreeSurface(textSurface);
+  }
+
   return mTexture != NULL;
 }
 

@@ -3,6 +3,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 
 class Texture {
@@ -13,7 +14,7 @@ class Texture {
 
     bool loadFromFile(SDL_Renderer* renderer,std::string path);
 
-    bool loadFromRenderedText(std::string textureText, SDL_Color textColor);
+    bool loadFromRenderedText(std::string textureText, TTF_Font* font, SDL_Color textColor = { 0, 0, 0 });
 
     void free();
 

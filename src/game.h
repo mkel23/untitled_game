@@ -7,8 +7,6 @@
 
 class Game {
   public:
-    static const int TOTAL_TILES = 1200;
-
     static Game* Instance();
     Game(Game&) = delete;
     void operator=(const Game&) = delete;
@@ -26,7 +24,7 @@ class Game {
 
     SDL_Rect* camera();
 
-    Tile** tiles();
+    GameStateManager* gameStateManager();
 
   private:
     Game() {};
@@ -36,21 +34,9 @@ class Game {
 
     bool init();
 
-    bool loadMedia();
-
-    void setTiles();
-
-    void renderDebugGrid();
-
     bool mRunning;
 
     static Game* sInstance;
-
-    Tile* mTiles[TOTAL_TILES];
-
-    Texture mTileSheetTexture;
-
-    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES];
 
     SDL_Window* mWindow = NULL;
 
