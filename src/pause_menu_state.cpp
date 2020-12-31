@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "game.h"
 #include "play_state.h"
+#include "save_state_manager.h"
 #include "pause_menu_state.h"
 
 PauseMenuState::PauseMenuState() {
@@ -20,11 +21,11 @@ PauseMenuState::PauseMenuState() {
   ++buttonCounter;
 
   // SAVE GAME
-  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Save", mMenuFont, 4, &saveGame));
+  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Save", mMenuFont, 4, &SaveStateManager::saveGame));
   ++buttonCounter;
 
   // LOAD GAME
-  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Load", mMenuFont, 4, &loadGame));
+  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Load", mMenuFont, 4, &SaveStateManager::loadGame));
   ++buttonCounter;
 
   // QUIT
@@ -54,14 +55,6 @@ void PauseMenuState::render(int frame) {
 
 void PauseMenuState::resumeGame() {
   Game::Instance()->gameStateManager()->popState();
-}
-
-void PauseMenuState::saveGame() {
-  printf("TODO: implement loading and saving\n");
-}
-
-void PauseMenuState::loadGame() {
-  printf("TODO: implement loading and saving\n");
 }
 
 void PauseMenuState::quit() {

@@ -23,7 +23,7 @@ class Player {
 
     static const int PLAYER_SPRITE_FRAMES = 4;
 
-    Player(Tile** tiles);
+    Player(Tile** tiles, int x, int y, int direction);
     ~Player();
 
     void update();
@@ -33,6 +33,10 @@ class Player {
     void setCamera();
 
     void render(int frame);
+
+    // TODO: should create a PlayerSaveData struct that grabs all relevant data. Can return that here in one call instead.
+    SDL_Rect* box();
+    int direction();
 
   private:
     int mDirection;

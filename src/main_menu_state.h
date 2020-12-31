@@ -24,7 +24,6 @@ class MainMenuState : public GameState {
     const int FONT_SIZE = 16;
 
     static void newGame();
-    static void loadGame();
     static void quit();
 
     SDL_Rect mBackground;

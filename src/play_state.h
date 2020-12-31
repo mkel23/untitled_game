@@ -8,7 +8,7 @@ class PlayState : public GameState {
   public:
     static const int TOTAL_TILES = 1200;
 
-    PlayState();
+    PlayState(int x = 0, int y = 0, int direction = static_cast<int>(PlayerDirection::DOWN));
     ~PlayState();
 
     virtual void update();

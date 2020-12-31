@@ -4,11 +4,11 @@
 #include "input_handler.h"
 #include "player.h"
 
-Player::Player(Tile** tiles) {
+Player::Player(Tile** tiles, int x, int y, int direction) {
   loadMedia();
 
-  mTargetX = 0;
-  mTargetY = 0;
+  mTargetX = x;
+  mTargetY = y;
 
   mBox.x = mTargetX;
   mBox.y = mTargetY;
@@ -16,7 +16,7 @@ Player::Player(Tile** tiles) {
   mBox.w = PLAYER_WIDTH;
   mBox.h = PLAYER_HEIGHT;
 
-  mDirection = static_cast<int>(PlayerDirection::DOWN);
+  mDirection = direction;
 
   mMoving = false;
 
@@ -139,4 +139,12 @@ void Player::render(int frame) {
   SDL_Rect* camera = Game::Instance()->camera();
 
   mPlayerTexture.render(mBox.x - camera->x, mBox.y - camera->y, renderer, &mPlayerClips[mDirection][playerFrame]);
+}
+
+SDL_Rect* Player::box() {
+  return &mBox;
+}
+
+int Player::direction() {
+  return mDirection;
 }

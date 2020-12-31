@@ -23,8 +23,6 @@ class PauseMenuState : public GameState {
     const int FONT_SIZE = 16;
 
     static void resumeGame();
-    static void saveGame();
-    static void loadGame();
     static void quit();
 
     SDL_Rect mBackground;

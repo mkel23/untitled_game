@@ -1,6 +1,7 @@
 #include "constants.h"
 #include "game.h"
 #include "play_state.h"
+#include "save_state_manager.h"
 #include "main_menu_state.h"
 
 MainMenuState::MainMenuState() {
@@ -20,7 +21,7 @@ MainMenuState::MainMenuState() {
   ++buttonCounter;
 
   // LOAD GAME
-  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Load", mMenuFont, 4, &loadGame));
+  mButtons.push_back(new MenuButton(GUTTER_WIDTH + mBackground.x, (BUTTON_HEIGHT * buttonCounter) + (GUTTER_HEIGHT * (buttonCounter + 1)) + (buttonCounter * GUTTER_HEIGHT) + mBackground.y, mBackground.w - (2 * GUTTER_WIDTH), BUTTON_HEIGHT, "Load", mMenuFont, 4, &SaveStateManager::loadGame));
   ++buttonCounter;
 
   // QUIT
@@ -51,10 +52,6 @@ void MainMenuState::render(int frame) {
 
 void MainMenuState::newGame() {
   Game::Instance()->gameStateManager()->changeState(new PlayState);
-}
-
-void MainMenuState::loadGame() {
-  printf("TODO: implement loading and saving\n");
 }
 
 void MainMenuState::quit() {
