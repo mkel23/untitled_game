@@ -47,6 +47,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
   - [X] Extract classes out to their own files
   - [X] Game State
   - [ ] Sound
+    - [ ] Menu Button sounds
   - [X] Texture Loading/Rendering
     - [ ] Change map data to allow for "doors"
     - [ ] Level/Map class to deal with loading up tiles/maps
@@ -63,11 +64,11 @@ What I've thought of so far, obviously going to change FREQUENTLY:
       - [ ] Function to add buttons (say, text and font only). Handles spacing and everything
       - [ ] Add hover effects to buttons
       - [ ] Display menu title
-  - [ ] Saving/Loading (can only save when not in combat)
-    - [ ] X and Y position
-    - [ ] Player Direction
+  - [X] Saving/Loading (can only save when not in combat)
+    - [X] X and Y position
+    - [X] Player Direction
     - [ ] Map/Level state
-    - [ ] Hook up menu buttons
+    - [X] Hook up menu buttons
   - [ ] Notifier
     - [ ] Maybe useful when adding something to inventory? Like +1 and the item pic?
     - [ ] Also for quest completion/etc.

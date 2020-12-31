@@ -16,6 +16,7 @@ class SaveStateManager {
     static void loadGame();
 
   private:
+    // TODO: allow for multiple saves (and maybe even naming saves)
     const std::string FILE_NAME = "saves/main.json";
 
     SaveStateManager() {};
