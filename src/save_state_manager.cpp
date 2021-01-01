@@ -2,6 +2,7 @@
 #include <cereal/archives/json.hpp>
 #include "game.h"
 #include "play_state.h"
+#include "notification_manager.h"
 #include "save_state_manager.h"
 
 SaveStateManager* SaveStateManager::sInstance = 0;
@@ -36,6 +37,8 @@ void SaveStateManager::save() {
       cereal::make_nvp("playerDirection", mPlayer->direction())
     );
   }
+
+  NotificationManager::Instance()->addNotification("Game saved!");
 }
 
 void SaveStateManager::loadGame() {

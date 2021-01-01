@@ -69,7 +69,8 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [X] Player Direction
     - [ ] Map/Level state
     - [X] Hook up menu buttons
-  - [ ] Notifier
+  - [X] NotificationManager
+    - [X] Game saved successfully
     - [ ] Maybe useful when adding something to inventory? Like +1 and the item pic?
     - [ ] Also for quest completion/etc.
   - [ ] Potentially a TextureManager? Could "register" textures by name, then call the texture by name and have it render in a coord? Useful for when things are getting duped a lot/moved around between classes

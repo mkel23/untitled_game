@@ -2,6 +2,7 @@
 #include "constants.h"
 #include "input_handler.h"
 #include "main_menu_state.h"
+#include "notification_manager.h"
 #include "player.h"
 #include "game.h"
 
@@ -34,13 +35,15 @@ void Game::run() {
 
   while (mRunning) {
     InputHandler::Instance()->update();
-
+    NotificationManager::Instance()->update();
     mGameStateManager.update();
 
     SDL_SetRenderDrawColor(mRenderer, 0x00, 0x00, 0x00, 0xFF);
     SDL_RenderClear(mRenderer);
 
     mGameStateManager.render(frame / 8);
+
+    NotificationManager::Instance()->render();
 
     // TODO: clean up this frame stuff to account for capped fps
     ++frame;
