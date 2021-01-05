@@ -23,7 +23,7 @@ class Player {
 
     static const int PLAYER_SPRITE_FRAMES = 4;
 
-    Player(Tile** tiles, int x, int y, int direction);
+    Player(std::vector<Tile*>* tiles, int x, int y, int direction);
     ~Player();
 
     void update();
@@ -53,7 +53,7 @@ class Player {
 
     void loadMedia();
 
-    Tile** mTiles;
+    std::vector<Tile*>* mTiles;
 };
 
 #endif

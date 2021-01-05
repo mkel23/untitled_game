@@ -53,8 +53,10 @@ bool checkInBounds(SDL_Rect a, int x, int y) {
   return inBounds;
 }
 
-bool touchesWall(SDL_Rect box, Tile* tiles[]) {
-  for (int i = 0; i < PlayState::TOTAL_TILES; ++i) {
+bool touchesWall(SDL_Rect box, std::vector<Tile*>* tilesPtr) {
+  std::vector<Tile*> tiles = *tilesPtr;
+
+  for (int i = 0; i < tiles.size(); ++i) {
     if ((tiles[i]->getType() == static_cast<int>(TileTypes::ROCK))) {
       if (checkCollision(box, tiles[i]->getBox())) {
         return true;

@@ -4,7 +4,7 @@
 #include "input_handler.h"
 #include "player.h"
 
-Player::Player(Tile** tiles, int x, int y, int direction) {
+Player::Player(std::vector<Tile*>* tiles, int x, int y, int direction) {
   loadMedia();
 
   mTargetX = x;

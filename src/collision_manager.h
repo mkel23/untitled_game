@@ -8,6 +8,6 @@ bool checkCollision(SDL_Rect a, SDL_Rect b);
 
 bool checkInBounds(SDL_Rect a, int x, int y);
 
-bool touchesWall(SDL_Rect box, Tile* tiles[]);
+bool touchesWall(SDL_Rect box, std::vector<Tile*>* tilesPtr);
 
 #endif

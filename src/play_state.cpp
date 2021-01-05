@@ -9,19 +9,12 @@
 PlayState::PlayState(int x, int y, int direction) {
   loadMedia();
   setTiles();
-  mPlayer = new Player(mTiles, x, y, direction);
+  mPlayer = new Player(&mTiles, x, y, direction);
   SaveStateManager::Instance()->setPlayer(mPlayer);
 }
 
 PlayState::~PlayState() {
   mTileSheetTexture.free();
-
-  for (int i = 0; i < TOTAL_TILES; ++i) {
-    if (mTiles[i] != NULL) {
-      delete mTiles[i];
-      mTiles[i] = NULL;
-    }
-  }
 }
 
 void PlayState::update() {
@@ -35,7 +28,7 @@ void PlayState::update() {
 }
 
 void PlayState::render(int frame) {
-  for (int i = 0; i < TOTAL_TILES; ++i) {
+  for (int i = 0; i < mTiles.size(); ++i) {
     mTiles[i]->render(Game::Instance()->renderer(), *Game::Instance()->camera());
   }
 
@@ -100,7 +93,7 @@ void PlayState::setTiles() {
     if (map.fail()) break;
 
     if ((tileType >= 0) && (tileType < Tile::TOTAL_TILE_SPRITES)) {
-      mTiles[i] = new Tile(&mTileSheetTexture, mTileClips, x, y, tileType);
+      mTiles.push_back(new Tile(&mTileSheetTexture, mTileClips, x, y, tileType));
     } else {
       break;
     }

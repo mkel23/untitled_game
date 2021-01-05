@@ -24,7 +24,7 @@ class PlayState : public GameState {
 
     void renderDebugGrid();
 
-    Tile* mTiles[TOTAL_TILES];
+    std::vector<Tile*> mTiles;
 
     Texture mTileSheetTexture;
 
