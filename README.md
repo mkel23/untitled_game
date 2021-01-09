@@ -36,6 +36,10 @@ I've decided to just keep using Make for now, and revisit CMake or SCons later, 
 What I've thought of so far, obviously going to change FREQUENTLY:
 
 - [X] Get a background and character movement
+- [ ] Add `using namespace std` to files to clean some of that up
+- [ ] Some sort of entity dictionary? (json or yml)
+- [ ] Some sort of level/door dictionary to map level files and coordinates
+- [ ] Might be nice to get the texture name strings out to a constant (can't do inline because that's C++17, but maybe something cleaner than extern)
 - [X] Clean up Makefile
   - [ ] Look into CMake/SCons
   - [ ] Find a better (read: more portable) way to deal with SDL dependencies (Conan?)

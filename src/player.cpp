@@ -2,9 +2,10 @@
 #include "collision_manager.h"
 #include "game.h"
 #include "input_handler.h"
+#include "texture_manager.h"
 #include "player.h"
 
-Player::Player(std::vector<Tile*>* tiles, int x, int y, int direction) {
+Player::Player(std::vector<std::shared_ptr<Tile>>* tiles, int x, int y, int direction) {
   loadMedia();
 
   mTargetX = x;
@@ -24,11 +25,11 @@ Player::Player(std::vector<Tile*>* tiles, int x, int y, int direction) {
 }
 
 Player::~Player() {
-  mPlayerTexture.free();
+  TextureManager::Instance()->unloadTexture("player");
 }
 
 void Player::loadMedia() {
-  mPlayerTexture.loadFromFile(Game::Instance()->renderer(), "res/img/player.png");
+  TextureManager::Instance()->loadTexture("player", "res/img/player.png");
 
   for (int direction = 0; direction < static_cast<int>(PlayerDirection::TOTAL); ++direction) {
     mPlayerClips.push_back(std::vector<SDL_Rect>());
@@ -110,11 +111,13 @@ void Player::move() {
 }
 
 void Player::setCamera() {
-  // TODO: this feels a little dirty. Should have a function on Game that allows to set X/Y coords on camera
+  // TODO: this feels a little dirty. Should have a function on Game that allows to set X/Y coords on camera. And maybe this should exist in PlayState instead
   SDL_Rect* camera = Game::Instance()->camera();
 
   camera->x = (mBox.x + PLAYER_WIDTH / 2) - SCREEN_WIDTH / 2;
   camera->y = (mBox.y + PLAYER_HEIGHT / 2) - SCREEN_HEIGHT / 2;
+
+  // TODO: we can wrap these adjustments inside of a check in order to make the camera follow always for smaller levels? or maybe all levels (and then we can just make the borders of the levels have a few sets of trees or whatever in order to not show the background)?
 
   if (camera->x < 0) {
     camera->x = 0;
@@ -135,10 +138,9 @@ void Player::setCamera() {
 
 void Player::render(int frame) {
   int playerFrame = mMoving ? frame : 0;
-  SDL_Renderer* renderer = Game::Instance()->renderer();
   SDL_Rect* camera = Game::Instance()->camera();
 
-  mPlayerTexture.render(mBox.x - camera->x, mBox.y - camera->y, renderer, &mPlayerClips[mDirection][playerFrame]);
+  TextureManager::Instance()->render("player", mBox.x - camera->x, mBox.y - camera->y, &mPlayerClips[mDirection][playerFrame]);
 }
 
 SDL_Rect* Player::box() {

@@ -53,8 +53,8 @@ bool checkInBounds(SDL_Rect a, int x, int y) {
   return inBounds;
 }
 
-bool touchesWall(SDL_Rect box, std::vector<Tile*>* tilesPtr) {
-  std::vector<Tile*> tiles = *tilesPtr;
+bool touchesWall(SDL_Rect box, std::vector<std::shared_ptr<Tile>>* tilesPtr) {
+  std::vector<std::shared_ptr<Tile>> tiles = *tilesPtr;
 
   for (int i = 0; i < tiles.size(); ++i) {
     if ((tiles[i]->getType() == static_cast<int>(TileTypes::ROCK))) {

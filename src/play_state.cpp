@@ -1,4 +1,7 @@
 #include <fstream>
+#include <cereal/archives/json.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/vector.hpp>
 #include "constants.h"
 #include "game.h"
 #include "input_handler.h"
@@ -8,13 +11,13 @@
 
 PlayState::PlayState(int x, int y, int direction) {
   loadMedia();
-  setTiles();
+  loadTiles();
   mPlayer = new Player(&mTiles, x, y, direction);
   SaveStateManager::Instance()->setPlayer(mPlayer);
 }
 
 PlayState::~PlayState() {
-  mTileSheetTexture.free();
+  TextureManager::Instance()->unloadTexture("tile");
 }
 
 void PlayState::update() {
@@ -29,7 +32,7 @@ void PlayState::update() {
 
 void PlayState::render(int frame) {
   for (int i = 0; i < mTiles.size(); ++i) {
-    mTiles[i]->render(Game::Instance()->renderer(), *Game::Instance()->camera());
+    mTiles[i]->render(*Game::Instance()->camera());
   }
 
   mPlayer->render(frame);
@@ -52,35 +55,16 @@ void PlayState::renderDebugGrid() {
 }
 
 void PlayState::loadMedia() {
-  mTileSheetTexture.loadFromFile(Game::Instance()->renderer(), "res/img/tile.png");
-
-  int plain = static_cast<int>(TileTypes::PLAIN);
-  mTileClips[plain].x = 0;
-  mTileClips[plain].y = 0;
-  mTileClips[plain].w = 32;
-  mTileClips[plain].h = 32;
-
-  int grass = static_cast<int>(TileTypes::GRASS);
-  mTileClips[grass].x = 32;
-  mTileClips[grass].y = 0;
-  mTileClips[grass].w = 32;
-  mTileClips[grass].h = 32;
-
-  int rock = static_cast<int>(TileTypes::ROCK);
-  mTileClips[rock].x = 64;
-  mTileClips[rock].y = 0;
-  mTileClips[rock].w = 32;
-  mTileClips[rock].h = 32;
-
-  int tallGrass = static_cast<int>(TileTypes::TALL_GRASS);
-  mTileClips[tallGrass].x = 0;
-  mTileClips[tallGrass].y = 32;
-  mTileClips[tallGrass].w = 32;
-  mTileClips[tallGrass].h = 32;
+  TextureManager::Instance()->loadTexture("tile", "res/img/tile.png");
 }
 
-// TODO: should probably live on Level instead to allow different areas. also error handling here
-void PlayState::setTiles() {
+// TODO: tile/map loading should be done in a different Level class
+/** TODO:
+ * Keeping this here (along with saveTiles) for now in order to be able to quickly add new maps (via simple files) and
+ * then save to JSON for easy editing. Eventually, I would like to ship using binary outputs, but may introduce some
+ * DEV config option that allows me to tinker with the JSON ones before exporting as binary. This will probably come
+ * when I make the LevelEditor */
+void PlayState::loadSimpleMap() {
   int x = 0, y = 0;
 
   std::ifstream map("res/maps/main.map");
@@ -93,7 +77,8 @@ void PlayState::setTiles() {
     if (map.fail()) break;
 
     if ((tileType >= 0) && (tileType < Tile::TOTAL_TILE_SPRITES)) {
-      mTiles.push_back(new Tile(&mTileSheetTexture, mTileClips, x, y, tileType));
+      Tile* tile = new Tile(x, y, tileType);
+      mTiles.push_back(std::make_shared<Tile>(std::move(*tile)));
     } else {
       break;
     }
@@ -104,5 +89,23 @@ void PlayState::setTiles() {
       x = 0;
       y += Tile::TILE_HEIGHT;
     }
+  }
+}
+
+void PlayState::saveTiles() {
+  {
+    std::ofstream file("res/maps/main.json");
+    cereal::JSONOutputArchive archive(file);
+
+    archive(cereal::make_nvp("tiles", mTiles));
+  }
+}
+
+void PlayState::loadTiles() {
+  {
+    std::ifstream file("res/maps/main.json");
+    cereal::JSONInputArchive archive(file);
+
+    archive(cereal::make_nvp("tiles", mTiles));
   }
 }

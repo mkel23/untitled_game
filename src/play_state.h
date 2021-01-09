@@ -18,17 +18,16 @@ class PlayState : public GameState {
   private:
     Player* mPlayer;
 
-    void setTiles();
-
     void loadMedia();
 
     void renderDebugGrid();
 
-    std::vector<Tile*> mTiles;
+    void loadSimpleMap();
+    void saveTiles();
 
-    Texture mTileSheetTexture;
+    void loadTiles();
 
-    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES];
+    std::vector<std::shared_ptr<Tile>> mTiles;
 };
 
 #endif

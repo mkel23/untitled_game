@@ -3,7 +3,6 @@
 
 #include "game_state_manager.h"
 #include "texture.h"
-#include "tile.h"
 
 class Game {
   public:

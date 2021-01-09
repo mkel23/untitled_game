@@ -2,7 +2,10 @@
 #define TILE_H
 
 #include <SDL2/SDL.h>
+#include <cereal/archives/json.hpp>
+#include "game.h"
 #include "texture.h"
+#include "texture_manager.h"
 
 enum class TileTypes {
   PLAIN,
@@ -18,21 +21,38 @@ class Tile {
 
     static const int TOTAL_TILE_SPRITES = 4;
 
-    Tile(Texture* tileTexture, SDL_Rect* tileClips, int x, int y, int tileType);
+    Tile(int x, int y, int tileType);
 
-    void render(SDL_Renderer* renderer, SDL_Rect& camera);
+    void render(SDL_Rect& camera);
 
     int getType();
 
     SDL_Rect getBox();
+
+    template<class Archive>
+    void serialize(Archive& ar) {
+      ar(
+        cereal::make_nvp("xCoord", mBox.x),
+        cereal::make_nvp("yCoord", mBox.y),
+        cereal::make_nvp("type", mType)
+      );
+    }
+
+    template<class Archive>
+    static void load_and_construct(Archive& ar, cereal::construct<Tile>& construct) {
+      TextureManager::Instance()->loadTexture("tile", "res/img/tile.png");
+
+      int x, y, tileType;
+      ar(x, y, tileType);
+      construct(x, y, tileType);
+    }
 
   private:
     SDL_Rect mBox;
 
     int mType;
 
-    Texture* mTileTexture;
-    SDL_Rect* mTileClips;
+    SDL_Rect mTileClips[Tile::TOTAL_TILE_SPRITES];
 };
 
 #endif
