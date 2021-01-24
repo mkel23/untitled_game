@@ -64,8 +64,8 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [X] Main Menu
     - [X] Pause Menu
     - [ ] Controls Menu (just display and esc for back)
-    - [ ] Extract Menu component out
-      - [ ] Function to add buttons (say, text and font only). Handles spacing and everything
+    - [X] Extract Menu component out
+      - [X] Function to add buttons (say, text and font only). Handles spacing and everything
       - [ ] Add hover effects to buttons
       - [ ] Display menu title
   - [X] Saving/Loading (can only save when not in combat)
@@ -77,7 +77,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [X] Game saved successfully
     - [ ] Maybe useful when adding something to inventory? Like +1 and the item pic?
     - [ ] Also for quest completion/etc.
-  - [ ] Potentially a TextureManager? Could "register" textures by name, then call the texture by name and have it render in a coord? Useful for when things are getting duped a lot/moved around between classes
+  - [X] Potentially a TextureManager? Could "register" textures by name, then call the texture by name and have it render in a coord? Useful for when things are getting duped a lot/moved around between classes
   - [ ] Probably a Dialog System once I decide some story stuff
 - [ ] Story
   - [ ] Come up with some basic themes/rules

@@ -5,9 +5,10 @@
 #include "constants.h"
 #include "game.h"
 #include "input_handler.h"
-#include "pause_menu_state.h"
 #include "save_state_manager.h"
 #include "play_state.h"
+
+PlayState* PlayState::sCurrentPlayState = 0;
 
 PlayState::PlayState(int x, int y, int direction) {
   loadMedia();
@@ -22,12 +23,16 @@ PlayState::~PlayState() {
 
 void PlayState::update() {
   if (InputHandler::Instance()->isKeyDown(SDL_SCANCODE_ESCAPE)) {
-    Game::Instance()->gameStateManager()->pushState(new PauseMenuState);
+    createMenu();
   }
 
-  mPlayer->update();
-  mPlayer->move();
-  mPlayer->setCamera();
+  if (mMenu == NULL) {
+    mPlayer->update();
+    mPlayer->move();
+    mPlayer->setCamera();
+  } else {
+    mMenu->update();
+  }
 }
 
 void PlayState::render(int frame) {
@@ -38,6 +43,10 @@ void PlayState::render(int frame) {
   mPlayer->render(frame);
 
   renderDebugGrid();
+
+  if (mMenu != NULL) {
+    mMenu->render();
+  }
 }
 
 void PlayState::renderDebugGrid() {
@@ -56,6 +65,34 @@ void PlayState::renderDebugGrid() {
 
 void PlayState::loadMedia() {
   TextureManager::Instance()->loadTexture("tile", "res/img/tile.png");
+}
+
+void PlayState::createMenu() {
+  std::vector<std::pair<std::string, void(*)()>> labelsAndCallbacks;
+
+  labelsAndCallbacks.push_back(std::pair<std::string, void(*)()>("Resume", &resumeGame));
+  labelsAndCallbacks.push_back(std::pair<std::string, void(*)()>("Save", &SaveStateManager::saveGame));
+  labelsAndCallbacks.push_back(std::pair<std::string, void(*)()>("Load", &SaveStateManager::loadGame));
+  labelsAndCallbacks.push_back(std::pair<std::string, void(*)()>("Quit", &quit));
+
+  mMenu = new Menu(labelsAndCallbacks);
+
+  sCurrentPlayState = this;
+}
+
+void PlayState::clearMenu() {
+  mMenu = NULL;
+  sCurrentPlayState = 0;
+};
+
+void PlayState::resumeGame() {
+  if (sCurrentPlayState != 0) {
+    sCurrentPlayState->clearMenu();
+  }
+}
+
+void PlayState::quit() {
+  Game::Instance()->quit();
 }
 
 // TODO: tile/map loading should be done in a different Level class

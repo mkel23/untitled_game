@@ -3,6 +3,7 @@
 
 #include "game_state.h"
 #include "player.h"
+#include "menu.h"
 
 class PlayState : public GameState {
   public:
@@ -16,6 +17,8 @@ class PlayState : public GameState {
     virtual void render(int frame);
 
   private:
+    static PlayState* sCurrentPlayState;
+
     Player* mPlayer;
 
     void loadMedia();
@@ -27,7 +30,16 @@ class PlayState : public GameState {
 
     void loadTiles();
 
+    void createMenu();
+    void clearMenu();
+
+    static void resumeGame();
+
+    static void quit();
+
     std::vector<std::shared_ptr<Tile>> mTiles;
+
+    Menu* mMenu = NULL;
 };
 
 #endif

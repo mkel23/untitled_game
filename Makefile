@@ -2,7 +2,7 @@ INCLUDE=-I/usr/local/Cellar/sdl2/2.0.12_1/include -I/usr/local/Cellar/sdl2_image
 LIB=-L/usr/local/Cellar/sdl2/2.0.12_1/lib -L/usr/local/Cellar/sdl2_image/2.0.5/lib -L/usr/local/Cellar/sdl2_ttf/2.0.15/lib
 CC=g++
 CPPFLAGS=-c -std=c++11
-OBJS=main.o texture.o player.o collision_manager.o tile.o game.o input_handler.o play_state.o game_state_manager.o main_menu_state.o menu_button.o pause_menu_state.o save_state_manager.o notification_manager.o notification.o texture_manager.o
+OBJS=main.o texture.o player.o collision_manager.o tile.o game.o input_handler.o play_state.o game_state_manager.o main_menu_state.o menu_item.o save_state_manager.o notification_manager.o notification.o texture_manager.o menu.o
 PROG=play
 
 game: clean $(OBJS)
@@ -35,14 +35,14 @@ play_state.o:
 game_state_manager.o:
 	$(CC) $(CPPFLAGS) src/game_state_manager.cpp
 
+menu.o:
+	$(CC) $(CPPFLAGS) src/menu.cpp
+
 main_menu_state.o:
 	$(CC) $(CPPFLAGS) src/main_menu_state.cpp
 
-menu_button.o:
-	$(CC) $(CPPFLAGS) src/menu_button.cpp
-
-pause_menu_state.o:
-	$(CC) $(CPPFLAGS) src/pause_menu_state.cpp
+menu_item.o:
+	$(CC) $(CPPFLAGS) src/menu_item.cpp
 
 save_state_manager.o:
 	$(CC) $(CPPFLAGS) src/save_state_manager.cpp
