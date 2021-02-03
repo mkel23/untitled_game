@@ -72,7 +72,7 @@ void Player::update() {
   }
 }
 
-void Player::move() {
+void Player::move(Level* level) {
   int velX = 0, velY = 0;
 
   if (mTargetX > mBox.x) {
@@ -85,7 +85,7 @@ void Player::move() {
 
   mBox.x += velX;
 
-  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > LEVEL_WIDTH) || touchesWall(mBox, mTiles)) {
+  if ((mBox.x < 0) || (mBox.x + PLAYER_WIDTH > level->width()) || touchesWall(mBox, mTiles)) {
     mBox.x -= velX;
     mTargetX = mBox.x;
   }
@@ -100,7 +100,7 @@ void Player::move() {
 
   mBox.y += velY;
 
-  if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > LEVEL_HEIGHT) || touchesWall(mBox, mTiles)) {
+  if ((mBox.y < 0) || (mBox.y + PLAYER_HEIGHT > level->height()) || touchesWall(mBox, mTiles)) {
     mBox.y -= velY;
     mTargetY = mBox.y;
   }
@@ -110,7 +110,7 @@ void Player::move() {
   }
 }
 
-void Player::setCamera() {
+void Player::setCamera(Level* level) {
   // TODO: this feels a little dirty. Should have a function on Game that allows to set X/Y coords on camera. And maybe this should exist in PlayState instead
   SDL_Rect* camera = Game::Instance()->camera();
 
@@ -123,16 +123,16 @@ void Player::setCamera() {
     camera->x = 0;
   }
 
-  if (camera->x > LEVEL_WIDTH - camera->w) {
-    camera->x = LEVEL_WIDTH - camera->w;
+  if (camera->x > level->width() - camera->w) {
+    camera->x = level->width() - camera->w;
   }
 
   if (camera->y < 0) {
     camera->y = 0;
   }
 
-  if (camera->y > LEVEL_HEIGHT - camera->h) {
-    camera->y = LEVEL_HEIGHT - camera->h;
+  if (camera->y > level->height() - camera->h) {
+    camera->y = level->height() - camera->h;
   }
 }
 

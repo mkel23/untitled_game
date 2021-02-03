@@ -4,13 +4,12 @@
 #include "game_state.h"
 #include "player.h"
 #include "menu.h"
+#include "level.h"
 
 class PlayState : public GameState {
   public:
-    static const int TOTAL_TILES = 1200;
-
-    PlayState(int x = 0, int y = 0, int direction = static_cast<int>(PlayerDirection::DOWN));
-    ~PlayState();
+    // TODO: when moving player save info into a struct, replace these params as well
+    PlayState(std::string levelKey, int x = 0, int y = 0, int direction = static_cast<int>(PlayerDirection::DOWN));
 
     virtual void update();
 
@@ -21,16 +20,10 @@ class PlayState : public GameState {
 
     Player* mPlayer;
 
-    void loadMedia();
-
-    void renderDebugGrid();
-
-    void loadSimpleMap();
-    void saveTiles();
-
-    void loadTiles();
+    Level* mLevel;
 
     void createMenu();
+
     void clearMenu();
 
     static void resumeGame();

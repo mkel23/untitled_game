@@ -2,7 +2,7 @@ INCLUDE=-I/usr/local/Cellar/sdl2/2.0.12_1/include -I/usr/local/Cellar/sdl2_image
 LIB=-L/usr/local/Cellar/sdl2/2.0.12_1/lib -L/usr/local/Cellar/sdl2_image/2.0.5/lib -L/usr/local/Cellar/sdl2_ttf/2.0.15/lib
 CC=g++
 CPPFLAGS=-c -std=c++11
-OBJS=main.o texture.o player.o collision_manager.o tile.o game.o input_handler.o play_state.o game_state_manager.o main_menu_state.o menu_item.o save_state_manager.o notification_manager.o notification.o texture_manager.o menu.o
+OBJS=main.o texture.o player.o collision_manager.o tile.o game.o input_handler.o play_state.o game_state_manager.o main_menu_state.o menu_item.o save_state_manager.o notification_manager.o notification.o texture_manager.o menu.o level.o
 PROG=play
 
 game: clean $(OBJS)
@@ -55,6 +55,9 @@ notification.o:
 
 texture_manager.o:
 	$(CC) $(CPPFLAGS) src/texture_manager.cpp
+
+level.o:
+	$(CC) $(CPPFLAGS) src/level.cpp
 
 clean:
 	rm -f *.o play

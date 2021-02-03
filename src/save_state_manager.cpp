@@ -58,6 +58,7 @@ void SaveStateManager::load() {
       cereal::make_nvp("playerDirection", direction)
     );
 
-    Game::Instance()->gameStateManager()->changeState(new PlayState(x, y, direction));
+    // TODO: save and load current level as well...
+    Game::Instance()->gameStateManager()->changeState(new PlayState("main", x, y, direction));
   }
 }

@@ -6,7 +6,6 @@ class GameState {
     virtual void update() = 0;
     // TODO: move the frame to Game when dealing with capping FPS
     virtual void render(int frame) = 0;
-    virtual ~GameState() {};
 };
 
 #endif

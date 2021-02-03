@@ -24,7 +24,7 @@ void MainMenuState::render(int frame) {
 }
 
 void MainMenuState::newGame() {
-  Game::Instance()->gameStateManager()->changeState(new PlayState);
+  Game::Instance()->gameStateManager()->changeState(new PlayState("main"));
 }
 
 void MainMenuState::quit() {

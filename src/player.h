@@ -5,6 +5,7 @@
 #include <vector>
 #include "texture.h"
 #include "tile.h"
+#include "level.h"
 
 enum class PlayerDirection {
   UP,
@@ -28,9 +29,9 @@ class Player {
 
     void update();
 
-    void move();
+    void move(Level* level);
 
-    void setCamera();
+    void setCamera(Level* level);
 
     void render(int frame);
 

@@ -54,7 +54,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [ ] Menu Button sounds
   - [X] Texture Loading/Rendering
     - [ ] Change map data to allow for "doors"
-    - [ ] Level/Map class to deal with loading up tiles/maps
+    - [X] Level/Map class to deal with loading up tiles/maps
     - [ ] Level Editor to help with making new environments
     - [ ] Deal w/ doors and other levels/maps...can we learn how to do some sort of transition?
   - [X] Input/Controls
@@ -66,7 +66,7 @@ What I've thought of so far, obviously going to change FREQUENTLY:
     - [ ] Controls Menu (just display and esc for back)
     - [X] Extract Menu component out
       - [X] Function to add buttons (say, text and font only). Handles spacing and everything
-      - [ ] Add hover effects to buttons
+      - [X] Add hover effects to buttons
       - [ ] Display menu title
   - [X] Saving/Loading (can only save when not in combat)
     - [X] X and Y position
